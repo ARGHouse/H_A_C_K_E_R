@@ -54,7 +54,6 @@ GameObject:
   - component: {fileID: 114010463618387528}
   - component: {fileID: 54122242867594584}
   - component: {fileID: 114238992845135738}
-  - component: {fileID: 114007794906557072}
   m_Layer: 8
   m_Name: PLAYER
   m_TagString: Untagged
@@ -228,7 +227,6 @@ Transform:
   m_Children:
   - {fileID: 4067052109147206}
   - {fileID: 4041096233311550}
-  - {fileID: 4425135321792232}
   m_Father: {fileID: 4777297665645600}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -242,6 +240,7 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.0039999783, z: 0.023}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4425135321792232}
   - {fileID: 4456987466314164}
   - {fileID: 4450221662921804}
   m_Father: {fileID: 4016980066368348}
@@ -293,11 +292,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1693348067040314}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.37, z: -10.78}
+  m_LocalPosition: {x: 0, y: 4.374, z: -10.8029995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4016980066368348}
-  m_RootOrder: 2
+  m_Father: {fileID: 4041096233311550}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4450221662921804
 Transform:
@@ -311,7 +310,7 @@ Transform:
   m_Children:
   - {fileID: 4090893858489360}
   m_Father: {fileID: 4041096233311550}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4453036869716568
 Transform:
@@ -350,7 +349,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4041096233311550}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4777297665645600
 Transform:
@@ -648,20 +647,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverDistance: 0.75
   hoverForce: 9
-  rb: {fileID: 0}
---- !u!114 &114007794906557072
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1307718549370024}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3f224e87346b96428e425f71abb3259, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverDistance: 1
-  hoverForce: 0.00001
   rb: {fileID: 0}
 --- !u!114 &114010463618387528
 MonoBehaviour:

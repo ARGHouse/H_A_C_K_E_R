@@ -15,7 +15,8 @@
 
 		public bool mLShiftIsDown { get; private set; }
 		public bool mLCntrlIsDown { get; private set; }
-
+		public bool mRClickIsDown { get; private set; }
+		public bool mLClickIsDown { get; private set; }
 		/// for raycasting. Probably shouldn't be in this class, but it's easier.
 		public GameObject mSelectedObj { get; private set; }
 
@@ -87,7 +88,8 @@
 				OnLeftClickDown();
 			}
 
-			if (Input.GetButton("LeftClick"))
+			mLClickIsDown = Input.GetButton("LeftClick");
+			if(mLClickIsDown)
 				OnLeftClickIsDown();
 
 			/////////////////////////////////////////
@@ -101,7 +103,8 @@
 			else if (Input.GetButtonUp("RightClick"))
 				OnRightClickUp();
 
-			if (Input.GetButton("RightClick"))
+			mRClickIsDown =  Input.GetButton("RightClick");
+			if(mRClickIsDown)
 				OnRightClickIsDown();
 
 			/////////////////////////////////////////

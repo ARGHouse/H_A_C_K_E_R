@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\ThirdPersonCamera.cs" />
      <Compile Include="Assets\Scripts\TrojanTank.cs" />
      <Compile Include="Assets\Scripts\Turret Rotation.cs" />
+     <Compile Include="Assets\TrojanTankTurret.cs" />
  <Reference Include="Facebook.Unity.Settings">
  <HintPath>/home/tara/Documents/Hacker/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
  </Reference>
