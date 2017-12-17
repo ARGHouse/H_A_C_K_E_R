@@ -30,7 +30,6 @@ public class HoverScript : MonoBehaviour
 				// find percentage of currentHeight below Hoverdistance
 				hoverForceMultiplier = (hoverDistance - currentHeight) / hoverDistance;
 				hoverForceApplied = (transform.up * hoverForce * hoverForceMultiplier) - (Physics.gravity /4);
-				print(hoverForceApplied);
 				rb.AddForceAtPosition(hoverForceApplied, transform.position, ForceMode.Force);
 			}
 			else

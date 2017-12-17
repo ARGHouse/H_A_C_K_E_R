@@ -640,6 +640,16 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: -6
       objectReference: {fileID: 0}
+    - target: {fileID: 114238992845135738, guid: 3bd42cc6b89b94f0483fd88a5ffe0021,
+        type: 2}
+      propertyPath: mAccelerationForce
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114238992845135738, guid: 3bd42cc6b89b94f0483fd88a5ffe0021,
+        type: 2}
+      propertyPath: mMaxSpeed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3bd42cc6b89b94f0483fd88a5ffe0021, type: 2}
   m_IsPrefabParent: 0
