@@ -67,7 +67,23 @@ InputManager:
     snap: 0
     invert: 0
     type: 0
-    axis: 0
+    axis: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: WC_YAxis
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 1
     joyNum: 0
   - serializedVersion: 3
     m_Name: Backward
@@ -83,6 +99,22 @@ InputManager:
     snap: 0
     invert: 0
     type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: WC_XAxis
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: s
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
     axis: 0
     joyNum: 0
   - serializedVersion: 3
@@ -132,6 +164,38 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: WC_RotateX
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: e
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 3
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: WC_RotateY
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: e
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 4
     joyNum: 0
   - serializedVersion: 3
     m_Name: RotateLeft

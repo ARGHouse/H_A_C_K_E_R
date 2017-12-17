@@ -1,44 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class HoverScript : MonoBehaviour
+﻿namespace HACKER
 {
-	public float hoverDistance = 0.75f;
-	public float hoverForce = 10.0f;
-	public Rigidbody rb;
-	private float currentHeight = 0.0f;
-	private float hoverForceMultiplier = 0.0f;
-	private Vector3 hoverForceApplied = Vector3.zero;
+	using System.Collections;
+	using System.Collections.Generic;
+	using UnityEngine;
 
-	// Use this for initialization
-	void Awake()
+	public class HoverScript : MonoBehaviour
 	{
-		rb = GetComponentInParent<Rigidbody>();
-	}
+		public float hoverDistance = 0.75f;
+		public float hoverForce = 10.0f;
+		public Rigidbody rb;
+		private float currentHeight = 0.0f;
+		private float hoverForceMultiplier = 0.0f;
+		private Vector3 hoverForceApplied = Vector3.zero;
 
-	void FixedUpdate()
-	{
-		RaycastHit rayHit;
-		Vector3 offset = new Vector3(0, 100, 0);//just to make sure we haven't ended up below the ground mesh somehow...
-		int layerMask = 1 << LayerMask.NameToLayer("Default");
-		if (Physics.Raycast(transform.position + offset, -Vector3.up, out rayHit, 1000, layerMask))
+		// Use this for initialization
+		void Awake()
 		{
-			currentHeight = rayHit.distance - offset.y;
-			if (currentHeight < (hoverDistance))
+			rb = GetComponentInParent<Rigidbody>();
+		}
+
+		void FixedUpdate()
+		{
+			RaycastHit rayHit;
+			Vector3 offset = new Vector3(0, 100, 0);//just to make sure we haven't ended up below the ground mesh somehow...
+			int layerMask = 1 << LayerMask.NameToLayer("Default");
+			if (Physics.Raycast(transform.position + offset, -Vector3.up, out rayHit, 1000, layerMask))
 			{
-				// find percentage of currentHeight below Hoverdistance
-				hoverForceMultiplier = (hoverDistance - currentHeight) / hoverDistance;
-				hoverForceApplied = (transform.up * hoverForce * hoverForceMultiplier) - (Physics.gravity /4);
-				rb.AddForceAtPosition(hoverForceApplied, transform.position, ForceMode.Force);
-			}
-			else
-			{
-				//Apply down Impulse force for half distance above hover
-				if (currentHeight > (hoverDistance * 1.5f))
+				currentHeight = rayHit.distance - offset.y;
+				if (currentHeight < (hoverDistance))
 				{
-					hoverForceApplied = Physics.gravity /4;
+					// find percentage of currentHeight below Hoverdistance
+					hoverForceMultiplier = (hoverDistance - currentHeight) / hoverDistance;
+					hoverForceApplied = (transform.up * hoverForce * hoverForceMultiplier) - (Physics.gravity / 4);
 					rb.AddForceAtPosition(hoverForceApplied, transform.position, ForceMode.Force);
+				}
+				else
+				{
+					//Apply down Impulse force for half distance above hover
+					if (currentHeight > (hoverDistance * 1.5f))
+					{
+						hoverForceApplied = Physics.gravity / 4;
+						rb.AddForceAtPosition(hoverForceApplied, transform.position, ForceMode.Force);
+					}
 				}
 			}
 		}

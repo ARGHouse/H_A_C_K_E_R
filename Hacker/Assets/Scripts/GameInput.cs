@@ -1,4 +1,4 @@
-﻿﻿namespace HACKER
+﻿namespace HACKER
 {
 	using System.Collections;
 	using System.Collections.Generic;
@@ -25,7 +25,8 @@
 		/// layer masks:
 		public LayerMask mDefaultMask { get; private set; }
 		public LayerMask mPlayerMask { get; private set; }
-
+		[SerializeField]
+		private float mDeadZone = 0.1f;
 		public override void Awake()
 		{
 			base.Awake();
@@ -56,18 +57,22 @@
 		/// for calls that apply physics movement.
 		private void CheckFixedInput()
 		{
-			if (Input.GetButton("Forward"))
+			if (Input.GetButton("Forward") || Input.GetAxisRaw("WC_YAxis") < -mDeadZone)
 				OnForwardIsDown();
-			if (Input.GetButton("Backward"))
+			if (Input.GetButton("Backward") || Input.GetAxisRaw("WC_YAxis") > mDeadZone)
 				OnBackwardIsDown();
-			if (Input.GetButton("Left"))
+			if (Input.GetButton("Left") || Input.GetAxisRaw("WC_XAxis") < -mDeadZone)
 				OnLeftIsDown();
-			if (Input.GetButton("Right"))
+			if (Input.GetButton("Right") || Input.GetAxisRaw("WC_XAxis") > mDeadZone)
 				OnRightIsDown();
-			if (Input.GetButton("RotateRight"))
+			if (Input.GetButton("RotateRight") || Input.GetAxisRaw("WC_RotateX") > mDeadZone)
 				OnRotateRightIsDown();
-			if (Input.GetButton("RotateLeft"))
+			if (Input.GetButton("RotateLeft")|| Input.GetAxisRaw("WC_RotateX") < -mDeadZone)
 				OnRotateLeftIsDown();
+			if (Input.GetAxisRaw("WC_RotateY") > mDeadZone)
+				OnRotateUpIsDown();
+			if (Input.GetAxisRaw("WC_RotateY") < -mDeadZone)
+				OnRotateDownIsDown();
 			if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
 				OnMouseWheelUp();
 			if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
@@ -282,6 +287,22 @@
 		{
 			if (RotateLeftIsDown != null)
 				RotateLeftIsDown(this, EventArgs.Empty);
+		}
+
+		public delegate void RotateUpIsDownEventHandler(object source, EventArgs args);
+		public event RotateUpIsDownEventHandler RotateUpIsDown;
+		public void OnRotateUpIsDown()
+		{
+			if (RotateUpIsDown != null)
+				RotateUpIsDown(this, EventArgs.Empty);
+		}
+
+		public delegate void RotateDownIsDownEventHandler(object source, EventArgs args);
+		public event RotateDownIsDownEventHandler RotateDownIsDown;
+		public void OnRotateDownIsDown()
+		{
+			if (RotateDownIsDown != null)
+				RotateDownIsDown(this, EventArgs.Empty);
 		}
 
 		//OnMouseWheel

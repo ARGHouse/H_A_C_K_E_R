@@ -11,7 +11,6 @@
 		public GameInput mGameInput { get; private set; }
 		public HoverScript[] mHoverObjects { get; private set; }
 
-		public Vector3 forwardd = new Vector3(0, 0, 0);
 		/// force multiplier for movement acceleration
 		[SerializeField]
 		private float mAccelerationForce = 1.0f;
@@ -20,6 +19,7 @@
 		[SerializeField]
 		private float mMaxSpeed = 5.0f;
 
+		/// tank chasis turn speed
 		[SerializeField]
 		private float mTurnSpeed = 1.0f;
 
@@ -44,7 +44,6 @@
 
 		protected virtual void MoveTank(Vector3 dir)
 		{
-			forwardd = dir;
 			mBody.AddForce(dir * mAccelerationForce, ForceMode.Acceleration);
 		}
 
