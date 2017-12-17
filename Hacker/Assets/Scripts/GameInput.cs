@@ -8,8 +8,11 @@
 	{
 		public Camera mCamera { get; private set; }
 		public Vector3 mMouseWorldPosition { get; private set; }
+
+		/// current raycast object selected by mouse.
 		public string mHitName { get; private set; }
 		public GameObject mHitObject { get; private set; }
+
 		public bool mLShiftIsDown { get; private set; }
 		public bool mLCntrlIsDown { get; private set; }
 
@@ -17,6 +20,10 @@
 		public GameObject mSelectedObj { get; private set; }
 
 		public static GameInput mGameInput { get; private set; }
+
+		/// layer masks:
+		public LayerMask mDefaultMask { get; private set; }
+		public LayerMask mPlayerMask { get; private set; }
 
 		public override void Awake()
 		{
@@ -29,6 +36,8 @@
 			mHitObject = null;
 			mLShiftIsDown = false;
 			mLCntrlIsDown = false;
+			mDefaultMask = LayerMask.NameToLayer("Default");
+			mPlayerMask = LayerMask.NameToLayer("Player");
 		}
 
 		/// processes our game input.

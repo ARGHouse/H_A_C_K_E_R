@@ -193,5 +193,10 @@
 			else
 				throw new ArgumentNullException("asset bundle for " + bundleName + " could not be loaded or does not exist.");
 		}
+
+		public static Vector3 FlattenDir(Vector3 vecIN)
+		{
+			return new Vector3(vecIN.x, 0, vecIN.z);
+		}
 	}
 }

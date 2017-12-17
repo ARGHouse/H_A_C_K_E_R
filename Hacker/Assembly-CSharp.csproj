@@ -51,15 +51,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\GameInput.cs" />
-     <Compile Include="Assets\Helpers.cs" />
+     <Compile Include="Assets\Scripts\GameInput.cs" />
      <Compile Include="Assets\Scripts\Gun Pitch.cs" />
+     <Compile Include="Assets\Scripts\HackerGameManager.cs" />
+     <Compile Include="Assets\Scripts\Helpers.cs" />
      <Compile Include="Assets\Scripts\HoverScript.cs" />
      <Compile Include="Assets\Scripts\PlayerSpawnPoint.cs" />
-     <Compile Include="Assets\Scripts\TankImpulse.cs" />
      <Compile Include="Assets\Scripts\ThirdPersonCamera.cs" />
+     <Compile Include="Assets\Scripts\TrojanTank.cs" />
      <Compile Include="Assets\Scripts\Turret Rotation.cs" />
-     <Compile Include="Assets\TrojanTank.cs" />
  <Reference Include="Facebook.Unity.Settings">
  <HintPath>/home/tara/Documents/Hacker/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
  </Reference>
