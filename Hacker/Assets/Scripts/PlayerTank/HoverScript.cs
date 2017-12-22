@@ -6,9 +6,13 @@
 
 	public class HoverScript : MonoBehaviour
 	{
+		/// distance we'll hover above the ground
 		public float hoverDistance = 0.75f;
+		/// strength of the hover force
 		public float hoverForce = 10.0f;
+		/// reference to our rigidbody
 		public Rigidbody rb;
+		/// our current height
 		private float currentHeight = 0.0f;
 		private float hoverForceMultiplier = 0.0f;
 		private Vector3 hoverForceApplied = Vector3.zero;
