@@ -30,7 +30,12 @@ ModelImporter:
     4300002: Surf_Grayscale_Render__Material__
     9500000: //RootNode
     10800000: Directional_Light
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Grayscale_Render
+    second: {fileID: 2100000, guid: 056a341a6a4a3044c89fd4a711f6758c, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

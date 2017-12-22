@@ -7,8 +7,6 @@
 
 	public delegate void HelperDelegate();
 
-	public enum eCardinalDir { top, bottom, left, right };
-
 	/// just a pair class implementation, very little functionality, sorry :P
 	public class Pair<T, U>
 	{
@@ -118,9 +116,6 @@
 		public static IntVec2 iv2Zero = new IntVec2(0, 0);
 		public static IntVec3 iv3Zero = new IntVec3(0, 0, 0);
 
-		// static globals:
-		public static int sMaxTurns = 3;
-
 		//TO NOTE: not thread safe. use only for object you'll only have one of (like game input handlers.)
 		//please, let it wake itself up and don't try to access object in awake() :P
 		//To ensure only a single instance of this class.
@@ -180,7 +175,13 @@
 
 		public static GameObject LoadGameObjFromBundle(string bundleName, string objName)
 		{
-			string path = Path.Combine(Application.streamingAssetsPath, bundleName);
+			string platform = "/Windows";
+			if (Application.platform == RuntimePlatform.LinuxPlayer || Application.platform == RuntimePlatform.LinuxEditor)
+				platform = "/Linux";
+			if (Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.OSXEditor)
+				platform = "/Mac";
+
+			string path = Path.Combine(Application.streamingAssetsPath + platform, bundleName);
 
 			var myLoadedAssetBundle = AssetBundle.LoadFromFile(path);
 

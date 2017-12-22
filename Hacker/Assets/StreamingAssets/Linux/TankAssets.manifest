@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 3515064148
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fa6c075d6bc6036c37cec38eed64da60
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3af05e31f37ab19e09e8c5eaad44ac30
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/TESTReticule.prefab
+Dependencies: []

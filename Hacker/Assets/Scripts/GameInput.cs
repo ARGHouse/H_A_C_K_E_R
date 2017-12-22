@@ -12,11 +12,14 @@
 		/// current raycast object selected by mouse.
 		public string mHitName { get; private set; }
 		public GameObject mHitObject { get; private set; }
-
+		public Vector3 mRayHitPos { get; private set; }
 		public bool mLShiftIsDown { get; private set; }
 		public bool mLCntrlIsDown { get; private set; }
 		public bool mRClickIsDown { get; private set; }
 		public bool mLClickIsDown { get; private set; }
+		public float mMouseHorizontal { get; private set; }
+		public float mMouseVertical { get; private set; }
+
 		/// for raycasting. Probably shouldn't be in this class, but it's easier.
 		public GameObject mSelectedObj { get; private set; }
 
@@ -27,6 +30,7 @@
 		public LayerMask mPlayerMask { get; private set; }
 		[SerializeField]
 		private float mDeadZone = 0.1f;
+		public HackerGameManager mManager { get; private set; }
 		public override void Awake()
 		{
 			base.Awake();
@@ -36,51 +40,94 @@
 			mMouseWorldPosition = new Vector3(0, 0, 0);
 			mHitName = "n/a";
 			mHitObject = null;
+			mRayHitPos = new Vector3(0, 0, 0);
 			mLShiftIsDown = false;
 			mLCntrlIsDown = false;
 			mDefaultMask = LayerMask.NameToLayer("Default");
 			mPlayerMask = LayerMask.NameToLayer("Player");
+			mMouseHorizontal = 0.0f;
+			mMouseVertical = 0.0f;
+		}
+
+		void Start()
+		{
+			mManager = HackerGameManager.mGame;
 		}
 
 		/// processes our game input.
 		void Update()
 		{
-			CheckInput();
+			if (mManager.UseController)
+				CheckControllerInput();
+			else
+				CheckKeyboardInput();
+
 			CheckRaycast();
+			CheckGeometryRaycast();
 		}
 
 		void FixedUpdate()
 		{
-			CheckFixedInput();
+			if (!mManager.UseController)
+				CheckKeyboardFixedInput();
+			else
+				CheckControllerFixedInput();
 		}
 
-		/// for calls that apply physics movement.
-		private void CheckFixedInput()
+		/// keys that apply physics movement.
+		/// Please only use 'is down' or axes for these.
+		/// events may not be detected due to the fixed time step.
+		private void CheckKeyboardFixedInput()
 		{
-			if (Input.GetButton("Forward") || Input.GetAxisRaw("WC_YAxis") < -mDeadZone)
+			if (Input.GetButton("Forward"))
 				OnForwardIsDown();
-			if (Input.GetButton("Backward") || Input.GetAxisRaw("WC_YAxis") > mDeadZone)
+			if (Input.GetButton("Backward"))
 				OnBackwardIsDown();
-			if (Input.GetButton("Left") || Input.GetAxisRaw("WC_XAxis") < -mDeadZone)
+			if (Input.GetButton("Left"))
 				OnLeftIsDown();
-			if (Input.GetButton("Right") || Input.GetAxisRaw("WC_XAxis") > mDeadZone)
+			if (Input.GetButton("Right"))
 				OnRightIsDown();
-			if (Input.GetButton("RotateRight") || Input.GetAxisRaw("WC_RotateX") > mDeadZone)
+			if (Input.GetButton("RotateRight"))
 				OnRotateRightIsDown();
-			if (Input.GetButton("RotateLeft")|| Input.GetAxisRaw("WC_RotateX") < -mDeadZone)
+			if (Input.GetButton("RotateLeft"))
 				OnRotateLeftIsDown();
-			if (Input.GetAxisRaw("WC_RotateY") > mDeadZone)
-				OnRotateUpIsDown();
-			if (Input.GetAxisRaw("WC_RotateY") < -mDeadZone)
-				OnRotateDownIsDown();
 			if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
 				OnMouseWheelUp();
 			if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
 				OnMouseWheelDown();
 		}
 
+
+		/// controller buttons that apply physics movement.
+		/// Please only use 'is down' or axes for these.
+		/// events may not be detected due to the fixed time step.
+		private void CheckControllerFixedInput()
+		{
+			if (Input.GetAxisRaw("WC_YAxis") < -mDeadZone)
+				OnForwardIsDown();
+			if (Input.GetAxisRaw("WC_YAxis") > mDeadZone)
+				OnBackwardIsDown();
+			if (Input.GetAxisRaw("WC_XAxis") < -mDeadZone)
+				OnLeftIsDown();
+			if (Input.GetAxisRaw("WC_XAxis") > mDeadZone)
+				OnRightIsDown();
+			if (Input.GetAxisRaw("WC_RotateX") > mDeadZone)
+				OnRotateRightIsDown();
+			if (Input.GetAxisRaw("WC_RotateX") < -mDeadZone)
+				OnRotateLeftIsDown();
+			if (Input.GetAxisRaw("WC_RotateY") > mDeadZone)
+				OnRotateUpIsDown();
+			if (Input.GetAxisRaw("WC_RotateY") < -mDeadZone)
+				OnRotateDownIsDown();
+		}
+
+		private void CheckControllerInput()
+		{
+
+		}
+
 		/// Checks for mouse click/drag events.
-		private void CheckInput()
+		private void CheckKeyboardInput()
 		{
 			/////////////////////////////////////////
 			/// left click/////////////////////////
@@ -94,7 +141,7 @@
 			}
 
 			mLClickIsDown = Input.GetButton("LeftClick");
-			if(mLClickIsDown)
+			if (mLClickIsDown)
 				OnLeftClickIsDown();
 
 			/////////////////////////////////////////
@@ -108,8 +155,8 @@
 			else if (Input.GetButtonUp("RightClick"))
 				OnRightClickUp();
 
-			mRClickIsDown =  Input.GetButton("RightClick");
-			if(mRClickIsDown)
+			mRClickIsDown = Input.GetButton("RightClick");
+			if (mRClickIsDown)
 				OnRightClickIsDown();
 
 			/////////////////////////////////////////
@@ -133,6 +180,12 @@
 
 			mLCntrlIsDown = Input.GetButton("LCntrl");
 			mLShiftIsDown = Input.GetButton("LShift");
+
+			/////////////////////////////////////////
+			/// axes ////////////////////////////
+			/////////////////////////////////////////
+			mMouseHorizontal = Input.GetAxisRaw("Horizontal");
+			mMouseVertical = Input.GetAxisRaw("Vertical");
 		}
 
 		/// Typical raycast. we store the hit object for use by other classes
@@ -149,6 +202,16 @@
 				mHitName = hit.collider.gameObject.name;
 				mHitObject = hit.collider.gameObject;
 			}
+		}
+
+		public void CheckGeometryRaycast()
+		{
+			Ray ray = mCamera.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			int layerMask = 1 << LayerMask.NameToLayer("Default");
+			bool raycast = Physics.Raycast(ray, out hit, 10000, layerMask);
+			if (raycast)
+				mRayHitPos = hit.point;
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////

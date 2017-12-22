@@ -19,6 +19,11 @@
 		private float mPivotSpeed = 10.0f;
 		[SerializeField]
 		private float mRailgunPivotSpeed = 10.0f;
+		public HackerGameManager mGame { get; private set; }
+		public GameObject mReticule { get; private set; }
+		public Vector3 mRotateStartPos { get; private set; }
+		[SerializeField]
+		public float mMouseTurretSpeed = 1.0f;
 
 		protected virtual void Awake()
 		{
@@ -34,15 +39,34 @@
 				if (cp.name == "RailgunPivot")
 					mRailgunPivot = cp.gameObject;
 			}
+			mReticule = Instantiate(Helpers.LoadGameObjFromBundle("TankAssets", "TESTReticule"), new Vector3(0, 0, 0), Quaternion.identity, this.transform.parent);
+			mReticule.SetActive(false);
+			mRotateStartPos = new Vector3(0,0,0);
 		}
 
 		protected virtual void Start()
 		{
+			mGame = HackerGameManager.mGame;
 			mGameInput = GameInput.mGameInput;
-			mGameInput.RotateRightIsDown += RotateRight;
-			mGameInput.RotateLeftIsDown += RotateLeft;
-			mGameInput.RotateUpIsDown += RotateUp;
-			mGameInput.RotateDownIsDown += RotateDown;
+			if (mGame.UseController)
+			{
+				mGameInput.RotateRightIsDown += RotateRight;
+				mGameInput.RotateLeftIsDown += RotateLeft;
+				mGameInput.RotateUpIsDown += RotateUp;
+				mGameInput.RotateDownIsDown += RotateDown;
+			}
+			else
+			{
+				mReticule.SetActive(true);
+				mGameInput.RightClickIsDown += MouseOrientTurret;
+			}
+		}
+
+		private void MouseOrientTurret(object source, EventArgs args)
+		{
+			if (mGame.UseController)
+				return;
+			mTransform.RotateAround(mPivot.transform.position, mPivot.transform.up, mGameInput.mMouseHorizontal * Time.deltaTime * mMouseTurretSpeed);
 		}
 
 		protected virtual void RotateTurret(Vector3 dir)

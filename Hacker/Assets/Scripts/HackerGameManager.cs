@@ -13,6 +13,8 @@
 		public float mStateTimer { get; private set; }
 		public float mDt { get; private set; }
 		public static HackerGameManager mGame { get; private set; }
+		public bool UseController = false;
+		
 		void Awake()
 		{
 			mState = eGameState.playing;
