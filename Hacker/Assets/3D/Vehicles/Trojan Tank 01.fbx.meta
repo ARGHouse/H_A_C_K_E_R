@@ -1,0 +1,581 @@
+fileFormatVersion: 2
+guid: 74298e8ab9d1144ccac838759f43460c
+timeCreated: 1513989941
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Back Propulsion
+    100002: Bit Railgun
+    100004: Camera
+    100006: Directional Light
+    100008: Forward Propulsion
+    100010: 'Forward Propulsion '
+    100012: Gun
+    100014: 'Gun '
+    100016: Gun Brace
+    100018: Gun Locator
+    100020: Gun pitch
+    100022: Hover 01
+    100024: 'Hover 01 '
+    100026: Hover 02
+    100028: 'Hover 02 '
+    100030: Hover 03
+    100032: 'Hover 03 '
+    100034: Hover 04
+    100036: 'Hover 04 '
+    100038: joint1
+    100040: joint2
+    100042: Locator
+    100044: Main Body
+    100046: 'Main Body '
+    100048: Mesh
+    100050: 'Mesh '
+    100052: Mesh  1
+    100054: Mesh  10
+    100056: Mesh  11
+    100058: Mesh  12
+    100060: Mesh  13
+    100062: Mesh  14
+    100064: Mesh  15
+    100066: Mesh  16
+    100068: Mesh  17
+    100070: Mesh  18
+    100072: Mesh  19
+    100074: Mesh  2
+    100076: Mesh  20
+    100078: Mesh  21
+    100080: Mesh  22
+    100082: Mesh  23
+    100084: Mesh  24
+    100086: Mesh  25
+    100088: Mesh  26
+    100090: Mesh  27
+    100092: Mesh  28
+    100094: Mesh  29
+    100096: Mesh  3
+    100098: Mesh  30
+    100100: Mesh  31
+    100102: Mesh  32
+    100104: Mesh  33
+    100106: Mesh  34
+    100108: Mesh  35
+    100110: Mesh  36
+    100112: Mesh  37
+    100114: Mesh  38
+    100116: Mesh  39
+    100118: Mesh  4
+    100120: Mesh  40
+    100122: Mesh  41
+    100124: Mesh  42
+    100126: Mesh  43
+    100128: Mesh  44
+    100130: Mesh  45
+    100132: Mesh  46
+    100134: Mesh  47
+    100136: Mesh  48
+    100138: Mesh  49
+    100140: Mesh  5
+    100142: Mesh  50
+    100144: Mesh  51
+    100146: Mesh  52
+    100148: Mesh  53
+    100150: Mesh  54
+    100152: Mesh  55
+    100154: Mesh  56
+    100156: Mesh  57
+    100158: Mesh  58
+    100160: Mesh  59
+    100162: Mesh  6
+    100164: Mesh  60
+    100166: Mesh  61
+    100168: Mesh  62
+    100170: Mesh  63
+    100172: Mesh  64
+    100174: Mesh  65
+    100176: Mesh  66
+    100178: Mesh  67
+    100180: Mesh  68
+    100182: Mesh  69
+    100184: Mesh  7
+    100186: Mesh  70
+    100188: Mesh  71
+    100190: Mesh  72
+    100192: Mesh  73
+    100194: Mesh  74
+    100196: Mesh  75
+    100198: Mesh  8
+    100200: Mesh  9
+    100202: Muzzle
+    100204: Propulsion
+    100206: Rotation plate
+    100208: Site scope 01
+    100210: 'Site scope 01 '
+    100212: Skeleton_Chassis Locator
+    100214: Skeleton_Propulsion core 2
+    100216: Tank
+    100218: 'Tank '
+    100220: Texture Group
+    100222: //RootNode
+    100224: Turret
+    100226: 'Turret '
+    100228: Turret Locator
+    100230: Workplane center
+    400000: Back Propulsion
+    400002: Bit Railgun
+    400004: Camera
+    400006: Directional Light
+    400008: Forward Propulsion
+    400010: 'Forward Propulsion '
+    400012: Gun
+    400014: 'Gun '
+    400016: Gun Brace
+    400018: Gun Locator
+    400020: Gun pitch
+    400022: Hover 01
+    400024: 'Hover 01 '
+    400026: Hover 02
+    400028: 'Hover 02 '
+    400030: Hover 03
+    400032: 'Hover 03 '
+    400034: Hover 04
+    400036: 'Hover 04 '
+    400038: joint1
+    400040: joint2
+    400042: Locator
+    400044: Main Body
+    400046: 'Main Body '
+    400048: Mesh
+    400050: 'Mesh '
+    400052: Mesh  1
+    400054: Mesh  10
+    400056: Mesh  11
+    400058: Mesh  12
+    400060: Mesh  13
+    400062: Mesh  14
+    400064: Mesh  15
+    400066: Mesh  16
+    400068: Mesh  17
+    400070: Mesh  18
+    400072: Mesh  19
+    400074: Mesh  2
+    400076: Mesh  20
+    400078: Mesh  21
+    400080: Mesh  22
+    400082: Mesh  23
+    400084: Mesh  24
+    400086: Mesh  25
+    400088: Mesh  26
+    400090: Mesh  27
+    400092: Mesh  28
+    400094: Mesh  29
+    400096: Mesh  3
+    400098: Mesh  30
+    400100: Mesh  31
+    400102: Mesh  32
+    400104: Mesh  33
+    400106: Mesh  34
+    400108: Mesh  35
+    400110: Mesh  36
+    400112: Mesh  37
+    400114: Mesh  38
+    400116: Mesh  39
+    400118: Mesh  4
+    400120: Mesh  40
+    400122: Mesh  41
+    400124: Mesh  42
+    400126: Mesh  43
+    400128: Mesh  44
+    400130: Mesh  45
+    400132: Mesh  46
+    400134: Mesh  47
+    400136: Mesh  48
+    400138: Mesh  49
+    400140: Mesh  5
+    400142: Mesh  50
+    400144: Mesh  51
+    400146: Mesh  52
+    400148: Mesh  53
+    400150: Mesh  54
+    400152: Mesh  55
+    400154: Mesh  56
+    400156: Mesh  57
+    400158: Mesh  58
+    400160: Mesh  59
+    400162: Mesh  6
+    400164: Mesh  60
+    400166: Mesh  61
+    400168: Mesh  62
+    400170: Mesh  63
+    400172: Mesh  64
+    400174: Mesh  65
+    400176: Mesh  66
+    400178: Mesh  67
+    400180: Mesh  68
+    400182: Mesh  69
+    400184: Mesh  7
+    400186: Mesh  70
+    400188: Mesh  71
+    400190: Mesh  72
+    400192: Mesh  73
+    400194: Mesh  74
+    400196: Mesh  75
+    400198: Mesh  8
+    400200: Mesh  9
+    400202: Muzzle
+    400204: Propulsion
+    400206: Rotation plate
+    400208: Site scope 01
+    400210: 'Site scope 01 '
+    400212: Skeleton_Chassis Locator
+    400214: Skeleton_Propulsion core 2
+    400216: Tank
+    400218: 'Tank '
+    400220: Texture Group
+    400222: //RootNode
+    400224: Turret
+    400226: 'Turret '
+    400228: Turret Locator
+    400230: Workplane center
+    2000000: Camera
+    2300000: Bit Railgun
+    2300002: Forward Propulsion
+    2300004: Gun Brace
+    2300006: Gun pitch
+    2300008: Hover 01
+    2300010: Hover 02
+    2300012: Hover 03
+    2300014: Hover 04
+    2300016: Main Body
+    2300018: Mesh
+    2300020: 'Mesh '
+    2300022: Mesh  10
+    2300024: Mesh  11
+    2300026: Mesh  12
+    2300028: Mesh  13
+    2300030: Mesh  14
+    2300032: Mesh  15
+    2300034: Mesh  16
+    2300036: Mesh  17
+    2300038: Mesh  18
+    2300040: Mesh  19
+    2300042: Mesh  2
+    2300044: Mesh  20
+    2300046: Mesh  21
+    2300048: Mesh  22
+    2300050: Mesh  23
+    2300052: Mesh  24
+    2300054: Mesh  25
+    2300056: Mesh  26
+    2300058: Mesh  27
+    2300060: Mesh  28
+    2300062: Mesh  29
+    2300064: Mesh  30
+    2300066: Mesh  31
+    2300068: Mesh  32
+    2300070: Mesh  33
+    2300072: Mesh  34
+    2300074: Mesh  35
+    2300076: Mesh  36
+    2300078: Mesh  37
+    2300080: Mesh  38
+    2300082: Mesh  39
+    2300084: Mesh  4
+    2300086: Mesh  40
+    2300088: Mesh  41
+    2300090: Mesh  42
+    2300092: Mesh  43
+    2300094: Mesh  44
+    2300096: Mesh  45
+    2300098: Mesh  46
+    2300100: Mesh  47
+    2300102: Mesh  48
+    2300104: Mesh  49
+    2300106: Mesh  50
+    2300108: Mesh  51
+    2300110: Mesh  52
+    2300112: Mesh  53
+    2300114: Mesh  54
+    2300116: Mesh  55
+    2300118: Mesh  56
+    2300120: Mesh  57
+    2300122: Mesh  58
+    2300124: Mesh  59
+    2300126: Mesh  6
+    2300128: Mesh  60
+    2300130: Mesh  61
+    2300132: Mesh  62
+    2300134: Mesh  65
+    2300136: Mesh  67
+    2300138: Mesh  69
+    2300140: Mesh  7
+    2300142: Mesh  70
+    2300144: Mesh  71
+    2300146: Mesh  72
+    2300148: Mesh  73
+    2300150: Mesh  74
+    2300152: Mesh  75
+    2300154: Mesh  8
+    2300156: Mesh  9
+    2300158: Muzzle
+    2300160: Propulsion
+    2300162: Rotation plate
+    2300164: Site scope 01
+    2300166: 'Site scope 01 '
+    2300168: Turret
+    3300000: Bit Railgun
+    3300002: Forward Propulsion
+    3300004: Gun Brace
+    3300006: Gun pitch
+    3300008: Hover 01
+    3300010: Hover 02
+    3300012: Hover 03
+    3300014: Hover 04
+    3300016: Main Body
+    3300018: Mesh
+    3300020: 'Mesh '
+    3300022: Mesh  10
+    3300024: Mesh  11
+    3300026: Mesh  12
+    3300028: Mesh  13
+    3300030: Mesh  14
+    3300032: Mesh  15
+    3300034: Mesh  16
+    3300036: Mesh  17
+    3300038: Mesh  18
+    3300040: Mesh  19
+    3300042: Mesh  2
+    3300044: Mesh  20
+    3300046: Mesh  21
+    3300048: Mesh  22
+    3300050: Mesh  23
+    3300052: Mesh  24
+    3300054: Mesh  25
+    3300056: Mesh  26
+    3300058: Mesh  27
+    3300060: Mesh  28
+    3300062: Mesh  29
+    3300064: Mesh  30
+    3300066: Mesh  31
+    3300068: Mesh  32
+    3300070: Mesh  33
+    3300072: Mesh  34
+    3300074: Mesh  35
+    3300076: Mesh  36
+    3300078: Mesh  37
+    3300080: Mesh  38
+    3300082: Mesh  39
+    3300084: Mesh  4
+    3300086: Mesh  40
+    3300088: Mesh  41
+    3300090: Mesh  42
+    3300092: Mesh  43
+    3300094: Mesh  44
+    3300096: Mesh  45
+    3300098: Mesh  46
+    3300100: Mesh  47
+    3300102: Mesh  48
+    3300104: Mesh  49
+    3300106: Mesh  50
+    3300108: Mesh  51
+    3300110: Mesh  52
+    3300112: Mesh  53
+    3300114: Mesh  54
+    3300116: Mesh  55
+    3300118: Mesh  56
+    3300120: Mesh  57
+    3300122: Mesh  58
+    3300124: Mesh  59
+    3300126: Mesh  6
+    3300128: Mesh  60
+    3300130: Mesh  61
+    3300132: Mesh  62
+    3300134: Mesh  65
+    3300136: Mesh  67
+    3300138: Mesh  69
+    3300140: Mesh  7
+    3300142: Mesh  70
+    3300144: Mesh  71
+    3300146: Mesh  72
+    3300148: Mesh  73
+    3300150: Mesh  74
+    3300152: Mesh  75
+    3300154: Mesh  8
+    3300156: Mesh  9
+    3300158: Muzzle
+    3300160: Propulsion
+    3300162: Rotation plate
+    3300164: Site scope 01
+    3300166: 'Site scope 01 '
+    3300168: Turret
+    4300000: Propulsion
+    4300002: 'Mesh '
+    4300004: 'Mesh '
+    4300006: 'Mesh '
+    4300008: Hover 04
+    4300010: 'Mesh '
+    4300012: 'Mesh '
+    4300014: 'Mesh '
+    4300016: 'Mesh '
+    4300018: 'Mesh '
+    4300020: 'Mesh '
+    4300022: 'Mesh '
+    4300024: 'Mesh '
+    4300026: 'Mesh '
+    4300028: 'Mesh '
+    4300030: 'Mesh '
+    4300032: 'Mesh '
+    4300034: 'Mesh '
+    4300036: 'Mesh '
+    4300038: 'Mesh '
+    4300040: Hover 02
+    4300042: 'Mesh '
+    4300044: 'Mesh '
+    4300046: 'Mesh '
+    4300048: 'Mesh '
+    4300050: 'Mesh '
+    4300052: 'Mesh '
+    4300054: 'Mesh '
+    4300056: 'Mesh '
+    4300058: Hover 01
+    4300060: 'Mesh '
+    4300062: 'Mesh '
+    4300064: 'Mesh '
+    4300066: 'Mesh '
+    4300068: 'Mesh '
+    4300070: 'Mesh '
+    4300072: 'Mesh '
+    4300074: 'Mesh '
+    4300076: Hover 03
+    4300078: 'Mesh '
+    4300080: Forward Propulsion
+    4300082: Rotation plate
+    4300084: Main Body
+    4300086: 'Mesh '
+    4300088: 'Mesh '
+    4300090: 'Mesh '
+    4300092: 'Mesh '
+    4300094: 'Mesh '
+    4300096: 'Mesh '
+    4300098: 'Mesh '
+    4300100: 'Mesh '
+    4300102: 'Mesh '
+    4300104: 'Mesh '
+    4300106: 'Mesh '
+    4300108: 'Mesh '
+    4300110: 'Mesh '
+    4300112: 'Mesh '
+    4300114: 'Mesh '
+    4300116: 'Mesh '
+    4300118: 'Mesh '
+    4300120: 'Mesh '
+    4300122: 'Mesh '
+    4300124: 'Mesh '
+    4300126: 'Mesh '
+    4300128: 'Mesh '
+    4300130: 'Mesh '
+    4300132: 'Mesh '
+    4300134: 'Mesh '
+    4300136: 'Mesh '
+    4300138: 'Mesh '
+    4300140: 'Mesh '
+    4300142: 'Mesh '
+    4300144: 'Mesh '
+    4300146: Mesh
+    4300148: 'Site scope 01 '
+    4300150: Turret
+    4300152: 'Mesh '
+    4300154: 'Mesh '
+    4300156: 'Mesh '
+    4300158: 'Mesh '
+    4300160: Site scope 01
+    4300162: Muzzle
+    4300164: Gun pitch
+    4300166: Gun Brace
+    4300168: Bit Railgun
+    7400000: Take 001
+    9500000: //RootNode
+    10800000: Directional Light
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: aa071cc5732f24f14b2a151c3332cc0d, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
