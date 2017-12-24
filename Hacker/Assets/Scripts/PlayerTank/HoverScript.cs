@@ -1,7 +1,7 @@
 ﻿namespace HACKER
 {
-	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections;
 	using UnityEngine;
 
 	public class HoverScript : MonoBehaviour
@@ -26,7 +26,7 @@
 		void FixedUpdate()
 		{
 			RaycastHit rayHit;
-			Vector3 offset = new Vector3(0, 100, 0);//just to make sure we haven't ended up below the ground mesh somehow...
+			Vector3 offset = new Vector3(0, 100, 0); //just to make sure we haven't ended up below the ground mesh somehow...
 			int layerMask = 1 << LayerMask.NameToLayer("Default");
 			if (Physics.Raycast(transform.position + offset, -Vector3.up, out rayHit, 1000, layerMask))
 			{
@@ -41,7 +41,7 @@
 				else
 				{
 					//Apply down Impulse force for half distance above hover
-					if (currentHeight > (hoverDistance * 1.5f))
+					if (currentHeight >(hoverDistance * 1.5f))
 					{
 						hoverForceApplied = Physics.gravity / 4;
 						rb.AddForceAtPosition(hoverForceApplied, transform.position, ForceMode.Force);

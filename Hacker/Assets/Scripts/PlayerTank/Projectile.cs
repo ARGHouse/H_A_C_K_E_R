@@ -1,11 +1,12 @@
 ﻿namespace HACKER
 {
-	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections;
 	using UnityEngine;
-	public enum eProjectileState { idle, fired, hit };
 	public class Projectile : MonoBehaviour
 	{
+		public enum eProjectileState { idle, fired, hit };
+
 		public eProjectileState mState { get; protected set; }
 		public float mStateTimer { get; protected set; }
 
@@ -27,8 +28,14 @@
 		/// visible mesh for the projectile.
 		public MeshRenderer mMesh { get; private set; }
 
+		/// our particles for the projectile
+		public ParticleSystem mParticles { get; protected set; }
+
+		public float mKick { get; protected set; }
 		protected virtual void Awake()
 		{
+			mKick = .003f;
+			mParticles = GetComponentInChildren<ParticleSystem>();
 			mMesh = GetComponentInChildren<MeshRenderer>();
 			mTankVelocity = new Vector3(0, 0, 0);
 			mTransform = transform;

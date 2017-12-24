@@ -142,12 +142,12 @@
 		{
 			for (int i = 0; i < mLaserProjectiles.Count; i++)
 			{
-				if (mLaserProjectiles[i].mState == eProjectileState.idle && 
+				if (mLaserProjectiles[i].mState == Projectile.eProjectileState.idle && 
 					mLaserProjectiles[i].mStateTimer > 1.0f)
 				{
 					mMuzzleFlash.Play();
 					StartCoroutine(mLaserProjectiles[i].Fire(mMuzzle.transform, mParentTank.mBody.velocity));
-					mParentTank.mBody.AddForceAtPosition(-mMuzzle.transform.forward * mLaserProjectiles[i].mFireForce * .005f, mMuzzle.transform.position, ForceMode.Impulse);
+					mParentTank.mBody.AddForceAtPosition(-mMuzzle.transform.forward * mLaserProjectiles[i].mFireForce * mLaserProjectiles[i].mKick, mMuzzle.transform.position, ForceMode.Impulse);
 					break;
 				}
 			}
