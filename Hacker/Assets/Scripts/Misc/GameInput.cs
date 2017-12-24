@@ -84,18 +84,26 @@
 		/// up/down events may not be detected due to the fixed time step.
 		private void CheckKeyboardFixedInput ()
 		{
-			if (Input.GetButton ("Forward"))
-				OnForwardIsDown ();
-			if (Input.GetButton ("Backward"))
-				OnBackwardIsDown ();
-			if (Input.GetButton ("Left"))
-				OnLeftIsDown ();
-			if (Input.GetButton ("Right"))
-				OnRightIsDown ();
-			if (Input.GetButton ("RotateRight"))
-				OnRotateRightIsDown ();
-			if (Input.GetButton ("RotateLeft"))
-				OnRotateLeftIsDown ();
+			if (Input.GetButton ("LeftForward"))
+			{
+				mLeftThrottle = 1;
+				OnLeftThrottleIsDown();
+			}
+			if (Input.GetButton ("RightForward"))
+			{
+				mRightThrottle= 1;
+				OnRightThrottleIsDown();
+			}
+			if (Input.GetButton ("LeftBackward"))
+			{
+				mLeftThrottle = -1;
+				OnLeftThrottleIsDown();
+			}
+			if (Input.GetButton ("RightBackward"))
+			{
+				mRightThrottle = -1;
+				OnRightThrottleIsDown();
+			}
 			if (Input.GetAxis ("Mouse ScrollWheel") > 0.0f)
 				OnMouseWheelUp ();
 			if (Input.GetAxis ("Mouse ScrollWheel") < 0.0f)
@@ -149,7 +157,10 @@
 
 		private void CheckControllerInput ()
 		{
-
+			if(Input.GetButtonUp("WC_FirePrimary"))
+				OnFirePrimaryUp();
+			if(Input.GetButtonDown("WC_FirePrimary"))
+				OnFirePrimaryDown ();
 		}
 
 		/// Checks for mouse click/drag events.
@@ -160,11 +171,9 @@
 			/////////////////////////////////////////
 
 			if (Input.GetButtonUp ("LeftClick"))
-				OnLeftClickUp ();
+				OnFirePrimaryUp ();
 			else if (Input.GetButtonDown ("LeftClick"))
-			{
-				OnLeftClickDown ();
-			}
+				OnFirePrimaryDown ();
 
 			mLClickIsDown = Input.GetButton ("LeftClick");
 			if (mLClickIsDown)
@@ -425,6 +434,29 @@
 		{
 			if (RightThrottleIsDown != null)
 				RightThrottleIsDown (this, EventArgs.Empty);
+		}
+
+		/// projectiles:
+		public delegate void FirePrimaryDownEventHandler (object source, EventArgs args);
+		public event FirePrimaryDownEventHandler FirePrimaryDown;
+		public void OnFirePrimaryDown ()
+		{
+			if (FirePrimaryDown != null)
+				FirePrimaryDown (this, EventArgs.Empty);
+		}
+		public delegate void FirePrimaryUpEventHandler (object source, EventArgs args);
+		public event FirePrimaryUpEventHandler FirePrimaryUp;
+		public void OnFirePrimaryUp ()
+		{
+			if (FirePrimaryUp != null)
+				FirePrimaryUp (this, EventArgs.Empty);
+		}
+		public delegate void FirePrimaryIsDownEventHandler (object source, EventArgs args);
+		public event FirePrimaryIsDownEventHandler FirePrimaryIsDown;
+		public void OnFirePrimaryIsDown ()
+		{
+			if (FirePrimaryIsDown != null)
+				FirePrimaryIsDown (this, EventArgs.Empty);
 		}
 	}
 }

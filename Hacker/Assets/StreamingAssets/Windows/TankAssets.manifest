@@ -1,30 +1,70 @@
 ManifestFileVersion: 0
-CRC: 2615048639
+CRC: 3683783812
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c68adbcc0d637abb3eb54ef39acfdaf4
+    Hash: 34cffc5b87fb49e5779cec0eb9f0b7cb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3af05e31f37ab19e09e8c5eaad44ac30
+    Hash: 521c5eb0b7fa2d1284f2a83f9bed09c0
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
   Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
 - Class: 23
+  Script: {instanceID: 0}
+- Class: 28
   Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
+- Class: 45
+  Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: d094c1c36aef24699a7c43e86435427f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 867114976266143c79cbabe26a23f0e0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e3f224e87346b96428e425f71abb3259, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8cc60d59bd5c54afcaa4d6c3998ad01a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 575e2acc4e3544d6aa95af455f5c53f9, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 124
   Script: {instanceID: 0}
 - Class: 135
   Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
 Assets:
+- Assets/Prefabs/LaserProjectile.prefab
 - Assets/Prefabs/TESTReticule.prefab
+- Assets/Prefabs/Player.prefab
 Dependencies: []

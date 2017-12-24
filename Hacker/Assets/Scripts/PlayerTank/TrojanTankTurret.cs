@@ -7,45 +7,57 @@
 
 	public class TrojanTankTurret : MonoBehaviour
 	{
-		public Transform mTransform { get; private set; }
-		public Camera mCam { get; private set; }
+		public Transform mTransform { get; protected set; }
+		public Camera mCam { get; protected set; }
 
 		/// offset of the camera from the turret.
-		public Vector3 mCamOffset { get; private set; }
-		public GameInput mGameInput { get; private set; }
+		public Vector3 mCamOffset { get; protected set; }
+		public GameInput mGameInput { get; protected set; }
 		/// pivot point for the turret.
-		public GameObject mPivot { get; private set; }
+		public GameObject mPivot { get; protected set; }
 		/// reference to the railgun
-		public GameObject mRailgun { get; private set; }
+		public GameObject mRailgun { get; protected set; }
 		/// pivot point for the railgun
-		public GameObject mRailgunPivot { get; private set; }
+		public GameObject mRailgunPivot { get; protected set; }
+
+		/// fire point for projectiles
+		public GameObject mMuzzle { get; protected set; }
+
 		/// speed of our turret rotation
 		[SerializeField]
-		private float mPivotSpeed = 10.0f;
+		protected float mPivotSpeed = 10.0f;
 		/// speed of the railgun rotation
 		[SerializeField]
-		private float mRailgunPivotSpeed = 10.0f;
-		public HackerGameManager mGame { get; private set; }
+		protected float mRailgunPivotSpeed = 10.0f;
+		public HackerGameManager mGame { get; protected set; }
 		/// our reticule.
-		public GameObject mReticule { get; private set; }
+		public GameObject mReticule { get; protected set; }
 
 		/// speed of our mouse  movement.
 		[SerializeField]
-		private float mMouseHorizontalTurretSpeed = 1.0f;
+		protected float mMouseHorizontalTurretSpeed = 1.0f;
 		[SerializeField]
-		private float mMouseVerticalTurretSpeed = 1.0f;
+		protected float mMouseVerticalTurretSpeed = 1.0f;
 
 		/// default distance for the reticule.
 		[SerializeField]
-		private float mReticuleDefaultDistance = 50.0f;
+		protected float mReticuleDefaultDistance = 50.0f;
 
-		protected virtual void Awake ()
+		public TrojanTank mParentTank { get; protected set; }
+
+		/// our projectiles
+		protected List<Projectile> mLaserProjectiles = new List<Projectile>();
+		[SerializeField]
+		protected int mMaxProjectiles = 50;
+
+		public ParticleSystem mMuzzleFlash { get; protected set; }
+		protected virtual void Awake()
 		{
 			mCam = Camera.main;
 			mTransform = transform;
 			mCamOffset = mCam.transform.position - mTransform.position;
-
-			foreach (Component cp in GetComponentsInChildren<Transform> ())
+			mParentTank = GetComponentInParent<TrojanTank>();
+			foreach (Component cp in GetComponentsInChildren<Transform>())
 			{
 				if (cp.name == "PivotPoint")
 					mPivot = cp.gameObject;
@@ -53,18 +65,30 @@
 					mRailgun = cp.gameObject;
 				if (cp.name == "RailgunPivot")
 					mRailgunPivot = cp.gameObject;
+				if (cp.name == "MuzzlePoint")
+					mMuzzle = cp.gameObject;
+				if(cp.name == "MuzzleFlash")
+					mMuzzleFlash = cp.GetComponentInChildren<ParticleSystem>();
 			}
-			mReticule = Instantiate (Helpers.LoadGameObjFromBundle ("TankAssets", "TESTReticule"), new Vector3 (0, 0, 0), Quaternion.identity, this.transform.parent);
-			mReticule.SetActive (false);
+			mReticule = Instantiate(Helpers.LoadGameObjFromBundle("TankAssets", "TESTReticule"), new Vector3(10000, 10000, 10000), Quaternion.identity, this.transform.parent);
+			mReticule.SetActive(false);
 
+			/// create our projectiles.
+			GameObject baseObj = Helpers.LoadGameObjFromBundle("TankAssets", "LaserProjectile");
+			/// so as not to muddy the editor.
+			GameObject go = Instantiate(new GameObject(), new Vector3(0,0,0), Quaternion.identity);
+			go.name = "PlayerProjectiles";
+			for (int i = 0; i < mMaxProjectiles; i++)
+				mLaserProjectiles.Add(Instantiate(baseObj, mTransform.position, Quaternion.identity, go.transform).GetComponentInChildren<Projectile>());
 		}
 
-		protected virtual void Start ()
+		protected virtual void Start()
 		{
 			mGame = HackerGameManager.mGame;
 			mGameInput = GameInput.mGameInput;
-			mReticule.SetActive (true);
+			mReticule.SetActive(true);
 
+			mGameInput.FirePrimaryDown += FirePrimaryProjectile;
 			if (mGame.UseController)
 			{
 				mGameInput.RotateRightIsDown += RotateRight;
@@ -76,42 +100,57 @@
 				mGameInput.RightClickIsDown += MouseOrientTurret;
 		}
 
-		private void MouseOrientTurret (object source, EventArgs args)
+		private void MouseOrientTurret(object source, EventArgs args)
 		{
-			mTransform.RotateAround (mPivot.transform.position, mPivot.transform.up, mGameInput.mMouseHorizontal * Time.deltaTime * mMouseHorizontalTurretSpeed);
-			mRailgun.transform.RotateAround (mRailgunPivot.transform.position, -mTransform.right, mGameInput.mMouseVertical * Time.deltaTime * mMouseVerticalTurretSpeed);
-			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * 40);
+			mTransform.RotateAround(mPivot.transform.position, mPivot.transform.up, mGameInput.mMouseHorizontal * Time.deltaTime * mMouseHorizontalTurretSpeed);
+			mRailgun.transform.RotateAround(mRailgunPivot.transform.position, -mTransform.right, mGameInput.mMouseVertical * Time.deltaTime * mMouseVerticalTurretSpeed);
+			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
 		}
 
-		protected virtual void RotateTurret (Vector3 dir)
+		protected virtual void RotateTurret(Vector3 dir)
 		{
-			mTransform.RotateAround (mPivot.transform.position, dir, mPivotSpeed);
-			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * 40);
+			mTransform.RotateAround(mPivot.transform.position, dir, mPivotSpeed);
+			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
 		}
 
-		protected virtual void RotateRailgun (Vector3 dir)
+		protected virtual void RotateRailgun(Vector3 dir)
 		{
-			mRailgun.transform.RotateAround (mRailgunPivot.transform.position, dir, mRailgunPivotSpeed);
-			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * 40);
+			mRailgun.transform.RotateAround(mRailgunPivot.transform.position, dir, mRailgunPivotSpeed);
+			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
 		}
 
-		protected virtual void RotateRight (object source, EventArgs args)
+		protected virtual void RotateRight(object source, EventArgs args)
 		{
-			RotateTurret (mTransform.up);
+			RotateTurret(mTransform.up);
 		}
 
-		protected virtual void RotateLeft (object source, EventArgs args)
+		protected virtual void RotateLeft(object source, EventArgs args)
 		{
-			RotateTurret (-mTransform.up);
+			RotateTurret(-mTransform.up);
 		}
 
-		protected virtual void RotateUp (object source, EventArgs args)
+		protected virtual void RotateUp(object source, EventArgs args)
 		{
-			RotateRailgun (mTransform.right);
+			RotateRailgun(mTransform.right);
 		}
-		protected virtual void RotateDown (object source, EventArgs args)
+		protected virtual void RotateDown(object source, EventArgs args)
 		{
-			RotateRailgun (-mTransform.right);
+			RotateRailgun(-mTransform.right);
+		}
+
+		protected virtual void FirePrimaryProjectile(object source, EventArgs args)
+		{
+			for (int i = 0; i < mLaserProjectiles.Count; i++)
+			{
+				if (mLaserProjectiles[i].mState == eProjectileState.idle && 
+					mLaserProjectiles[i].mStateTimer > 1.0f)
+				{
+					mMuzzleFlash.Play();
+					StartCoroutine(mLaserProjectiles[i].Fire(mMuzzle.transform, mParentTank.mBody.velocity));
+					mParentTank.mBody.AddForceAtPosition(-mMuzzle.transform.forward * mLaserProjectiles[i].mFireForce * .005f, mMuzzle.transform.position, ForceMode.Impulse);
+					break;
+				}
+			}
 		}
 	}
 }
