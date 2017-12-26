@@ -22,8 +22,9 @@
 		public enum ePlatform { winController, macController, linuxController, MouseAndKey };
 		public static GameInput mGameInput { get; private set; }
 		private ePlatform mPlatform = ePlatform.winController;
-		private string[] mFireKey = new string[] { "joystick button 0", "joystick button 0", "joystick button 0", "mouse 0" };
-
+		private string[] mPrimaryFireKey = new string[] { "joystick button 0", "joystick button 16", "joystick button 0", "mouse 0" };
+		private string[] mSecondaryFireKey = new string[] { "joystick button 1", "joystick button 17", "joystick button 1", "mouse 2" };
+		
 		/// rotation
 		public float mHorizontalRotation { get; private set; }
 		public float mVerticalRotation { get; private set; }
@@ -176,12 +177,19 @@
 			if (mVerticalRotation < -mDeadZone)
 				OnRotateDownIsDown ();
 
-			if (Input.GetKeyDown (mFireKey[(int) mPlatform]))
+			if (Input.GetKeyUp (mPrimaryFireKey[(int) mPlatform]))
 				OnFirePrimaryUp ();
-			if (Input.GetKeyDown (mFireKey[(int) mPlatform]))
+			if (Input.GetKeyDown (mPrimaryFireKey[(int) mPlatform]))
 				OnFirePrimaryDown ();
-			if (Input.GetKey (mFireKey[(int) mPlatform]))
+			if (Input.GetKey (mPrimaryFireKey[(int) mPlatform]))
 				OnFirePrimaryIsDown ();
+
+			if (Input.GetKeyUp (mSecondaryFireKey[(int) mPlatform]))
+				OnFireSecondaryUp ();
+			if (Input.GetKeyDown (mSecondaryFireKey[(int) mPlatform]))
+				OnFireSecondaryDown ();
+			if (Input.GetKey (mSecondaryFireKey[(int) mPlatform]))
+				OnFireSecondaryIsDown ();	
 		}
 
 		/// Checks for mouse click/drag events.
@@ -311,6 +319,8 @@
 		}
 
 		/// projectiles:
+
+		/// primary
 		public delegate void FirePrimaryDownEventHandler (object source, EventArgs args);
 		public event FirePrimaryDownEventHandler FirePrimaryDown;
 		public void OnFirePrimaryDown ()
@@ -331,6 +341,29 @@
 		{
 			if (FirePrimaryIsDown != null)
 				FirePrimaryIsDown (this, EventArgs.Empty);
+		}
+
+		/// secondary:
+		public delegate void FireSecondaryDownEventHandler (object source, EventArgs args);
+		public event FireSecondaryDownEventHandler FireSecondaryDown;
+		public void OnFireSecondaryDown ()
+		{
+			if (FireSecondaryDown != null)
+				FireSecondaryDown (this, EventArgs.Empty);
+		}
+		public delegate void FireSecondaryUpEventHandler (object source, EventArgs args);
+		public event FireSecondaryUpEventHandler FireSecondaryUp;
+		public void OnFireSecondaryUp ()
+		{
+			if (FireSecondaryUp != null)
+				FireSecondaryUp (this, EventArgs.Empty);
+		}
+		public delegate void FireSecondaryIsDownEventHandler (object source, EventArgs args);
+		public event FireSecondaryIsDownEventHandler FireSecondaryIsDown;
+		public void OnFireSecondaryIsDown ()
+		{
+			if (FireSecondaryIsDown != null)
+				FireSecondaryIsDown (this, EventArgs.Empty);
 		}
 	}
 }

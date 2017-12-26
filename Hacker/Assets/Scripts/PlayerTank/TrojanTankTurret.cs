@@ -46,18 +46,20 @@
 		public TrojanTank mParentTank { get; protected set; }
 
 		/// our projectiles
-		protected List<Projectile> mLaserProjectiles = new List<Projectile>();
+		protected List<Projectile> mPrimaryProjectiles = new List<Projectile> ();
+		protected List<Projectile> mSecondaryProjectiles = new List<Projectile> ();
+
 		[SerializeField]
 		protected int mMaxProjectiles = 50;
 
 		public ParticleSystem mMuzzleFlash { get; protected set; }
-		protected virtual void Awake()
+		protected virtual void Awake ()
 		{
 			mCam = Camera.main;
 			mTransform = transform;
 			mCamOffset = mCam.transform.position - mTransform.position;
-			mParentTank = GetComponentInParent<TrojanTank>();
-			foreach (Component cp in GetComponentsInChildren<Transform>())
+			mParentTank = GetComponentInParent<TrojanTank> ();
+			foreach (Component cp in GetComponentsInChildren<Transform> ())
 			{
 				if (cp.name == "PivotPoint")
 					mPivot = cp.gameObject;
@@ -67,28 +69,46 @@
 					mRailgunPivot = cp.gameObject;
 				if (cp.name == "MuzzlePoint")
 					mMuzzle = cp.gameObject;
-				if(cp.name == "MuzzleFlash")
-					mMuzzleFlash = cp.GetComponentInChildren<ParticleSystem>();
+				if (cp.name == "MuzzleFlash")
+					mMuzzleFlash = cp.GetComponentInChildren<ParticleSystem> ();
 			}
-			mReticule = Instantiate(Helpers.LoadGameObjFromBundle("TankAssets", "TESTReticule"), new Vector3(10000, 10000, 10000), Quaternion.identity, this.transform.parent);
-			mReticule.SetActive(false);
+			mReticule = Instantiate (Helpers.LoadGameObjFromBundle ("TankAssets", "TESTReticule"), new Vector3 (10000, 10000, 10000), Quaternion.identity, this.transform.parent);
+			mReticule.SetActive (false);
 
 			/// create our projectiles.
-			GameObject baseObj = Helpers.LoadGameObjFromBundle("TankAssets", "LaserProjectile");
+			GameObject baseLaserProjObj = Helpers.LoadGameObjFromBundle ("TankAssets", "LaserProjectile");
 			/// so as not to muddy the editor.
-			GameObject go = Instantiate(new GameObject(), new Vector3(0,0,0), Quaternion.identity);
-			go.name = "PlayerProjectiles";
+			GameObject go = Instantiate (new GameObject (), new Vector3 (0, 0, 0), Quaternion.identity);
+			go.name = "PrimaryProjectiles";
+			GameObject laserhitParticle = Helpers.LoadGameObjFromBundle ("TankAssets", "Spark");
 			for (int i = 0; i < mMaxProjectiles; i++)
-				mLaserProjectiles.Add(Instantiate(baseObj, mTransform.position, Quaternion.identity, go.transform).GetComponentInChildren<Projectile>());
+			{
+				mPrimaryProjectiles.Add (Instantiate (baseLaserProjObj, mTransform.position, Quaternion.identity, go.transform).GetComponentInChildren<Projectile> ());
+				mPrimaryProjectiles[mPrimaryProjectiles.Count - 1].Init (mParentTank, laserhitParticle);
+			}
+
+			GameObject baseMissileProjObj = Helpers.LoadGameObjFromBundle ("TankAssets", "Missile");
+			/// so as not to muddy the editor.
+			GameObject go2 = Instantiate (new GameObject (), new Vector3 (0, 0, 0), Quaternion.identity);
+			go2.name = "SecondaryProjectiles";
+			GameObject missilehitParticle = Helpers.LoadGameObjFromBundle ("TankAssets", "MissileExplosion");
+			for (int i = 0; i < mMaxProjectiles; i++)
+			{
+				mSecondaryProjectiles.Add (Instantiate (baseMissileProjObj, mTransform.position, Quaternion.identity, go2.transform).GetComponentInChildren<Projectile> ());
+				mSecondaryProjectiles[mSecondaryProjectiles.Count - 1].Init (mParentTank, missilehitParticle);
+			}
+
 		}
 
-		protected virtual void Start()
+		protected virtual void Start ()
 		{
 			mGame = HackerGameManager.mGame;
 			mGameInput = GameInput.mGameInput;
-			mReticule.SetActive(true);
+			mReticule.SetActive (true);
 
 			mGameInput.FirePrimaryDown += FirePrimaryProjectile;
+			mGameInput.FireSecondaryDown += FireSecondaryProjectile;
+
 			/// we don't want it grabbing every mouse movement, so rotate differently for kb+m.
 			if (mGame.UseController)
 			{
@@ -101,54 +121,79 @@
 				mGameInput.RightClickIsDown += MouseOrientTurret;
 		}
 
-		private void MouseOrientTurret(object source, EventArgs args)
+		void Update ()
 		{
-			mTransform.RotateAround(mPivot.transform.position, mPivot.transform.up, mGameInput.mHorizontalRotation * Time.deltaTime * mMouseHorizontalTurretSpeed);
-			mRailgun.transform.RotateAround(mRailgunPivot.transform.position, -mTransform.right, mGameInput.mVerticalRotation * Time.deltaTime * mMouseVerticalTurretSpeed);
-			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
-		}
-
-		protected virtual void RotateTurret(Vector3 dir)
-		{
-			mTransform.RotateAround(mPivot.transform.position, dir, mPivotSpeed);
-			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
-		}
-
-		protected virtual void RotateRailgun(Vector3 dir)
-		{
-			mRailgun.transform.RotateAround(mRailgunPivot.transform.position, dir, mRailgunPivotSpeed);
-			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
-		}
-
-		protected virtual void RotateRight(object source, EventArgs args)
-		{
-			RotateTurret(mTransform.up);
-		}
-
-		protected virtual void RotateLeft(object source, EventArgs args)
-		{
-			RotateTurret(-mTransform.up);
-		}
-
-		protected virtual void RotateUp(object source, EventArgs args)
-		{
-			RotateRailgun(mTransform.right);
-		}
-		protected virtual void RotateDown(object source, EventArgs args)
-		{
-			RotateRailgun(-mTransform.right);
-		}
-
-		protected virtual void FirePrimaryProjectile(object source, EventArgs args)
-		{
-			for (int i = 0; i < mLaserProjectiles.Count; i++)
+			Vector3 fwd = mRailgun.transform.forward;
+			Vector3 pos = mMuzzle.transform.position;
+			int layerMask = 1 << LayerMask.NameToLayer ("Default");
+			RaycastHit hit;
+			if (Physics.Raycast (pos, fwd, out hit, 100000, layerMask))
 			{
-				if (mLaserProjectiles[i].mState == Projectile.eProjectileState.idle && 
-					mLaserProjectiles[i].mStateTimer > 1.0f)
+				mReticule.transform.position = hit.point;// + new Vector3 (0, 1, 0);
+			}
+			else
+				mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
+		}
+		private void MouseOrientTurret (object source, EventArgs args)
+		{
+			mTransform.RotateAround (mPivot.transform.position, mPivot.transform.up, mGameInput.mHorizontalRotation * Time.deltaTime * mMouseHorizontalTurretSpeed);
+			mRailgun.transform.RotateAround (mRailgunPivot.transform.position, -mTransform.right, mGameInput.mVerticalRotation * Time.deltaTime * mMouseVerticalTurretSpeed);
+		}
+
+		protected virtual void RotateTurret (Vector3 dir)
+		{
+			mTransform.RotateAround (mPivot.transform.position, dir, mPivotSpeed);
+		}
+
+		protected virtual void RotateRailgun (Vector3 dir)
+		{
+			mRailgun.transform.RotateAround (mRailgunPivot.transform.position, dir, mRailgunPivotSpeed);
+		}
+
+		protected virtual void RotateRight (object source, EventArgs args)
+		{
+			RotateTurret (mTransform.up);
+		}
+
+		protected virtual void RotateLeft (object source, EventArgs args)
+		{
+			RotateTurret (-mTransform.up);
+		}
+
+		protected virtual void RotateUp (object source, EventArgs args)
+		{
+			RotateRailgun (mTransform.right);
+		}
+		protected virtual void RotateDown (object source, EventArgs args)
+		{
+			RotateRailgun (-mTransform.right);
+		}
+
+		protected virtual void FirePrimaryProjectile (object source, EventArgs args)
+		{
+			for (int i = 0; i < mPrimaryProjectiles.Count; i++)
+			{
+				if (mPrimaryProjectiles[i].mState == Projectile.eProjectileState.idle &&
+					mPrimaryProjectiles[i].mStateTimer > 1.0f)
 				{
-					mMuzzleFlash.Play();
-					StartCoroutine(mLaserProjectiles[i].Fire(mMuzzle.transform, mParentTank.mBody.velocity));
-					mParentTank.mBody.AddForceAtPosition(-mMuzzle.transform.forward * mLaserProjectiles[i].mFireForce * mLaserProjectiles[i].mKick, mMuzzle.transform.position, ForceMode.Impulse);
+					mMuzzleFlash.Play ();
+					StartCoroutine (mPrimaryProjectiles[i].Fire (mMuzzle.transform));
+					mParentTank.mBody.AddForceAtPosition (-mMuzzle.transform.forward * mPrimaryProjectiles[i].mFireForce * mPrimaryProjectiles[i].mKick, mMuzzle.transform.position, ForceMode.Impulse);
+					break;
+				}
+			}
+		}
+
+		protected virtual void FireSecondaryProjectile (object source, EventArgs args)
+		{
+			for (int i = 0; i < mSecondaryProjectiles.Count; i++)
+			{
+				if (mSecondaryProjectiles[i].mState == Projectile.eProjectileState.idle &&
+					mSecondaryProjectiles[i].mStateTimer > 1.0f)
+				{
+					mMuzzleFlash.Play ();
+					StartCoroutine (mSecondaryProjectiles[i].Fire (mMuzzle.transform, false));
+					mParentTank.mBody.AddForceAtPosition (-mMuzzle.transform.forward * mSecondaryProjectiles[i].mFireForce * mSecondaryProjectiles[i].mKick, mMuzzle.transform.position, ForceMode.Impulse);
 					break;
 				}
 			}

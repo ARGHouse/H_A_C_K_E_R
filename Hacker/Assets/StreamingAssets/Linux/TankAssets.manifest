@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3501143208
+CRC: 1241099440
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 89a5850135d6d9555eb085effd6114ae
+    Hash: 6bd1ea120cf58e1d5b178428fe766e0d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 521c5eb0b7fa2d1284f2a83f9bed09c0
+    Hash: 499060f75aa3be6a3dac836adb03d823
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -42,9 +42,13 @@ ClassTypes:
 - Class: 108
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: ee2e406224741438a81689cb6b7fdeab, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: d094c1c36aef24699a7c43e86435427f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 867114976266143c79cbabe26a23f0e0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f687387812e054b7b9cd21271d904e93, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: e3f224e87346b96428e425f71abb3259, type: 3}
 - Class: 114
@@ -64,7 +68,10 @@ ClassTypes:
 - Class: 199
   Script: {instanceID: 0}
 Assets:
+- Assets/Prefabs/Spark.prefab
 - Assets/Prefabs/LaserProjectile.prefab
+- Assets/Prefabs/MissileExplosion.prefab
 - Assets/Prefabs/TESTReticule.prefab
 - Assets/Prefabs/Player.prefab
+- Assets/Prefabs/Missile.prefab
 Dependencies: []
