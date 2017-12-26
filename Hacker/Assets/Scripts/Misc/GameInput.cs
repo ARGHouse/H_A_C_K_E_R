@@ -4,6 +4,7 @@
 	using System.Collections;
 	using System;
 	using UnityEngine;
+
 	public class GameInput : Helpers.HelperSingleton<GameInput>
 	{
 		public Camera mCamera { get; private set; }
@@ -13,19 +14,32 @@
 		public string mHitName { get; private set; }
 		public GameObject mHitObject { get; private set; }
 		public Vector3 mRayHitPos { get; private set; }
-		public bool mLShiftIsDown { get; private set; }
-		public bool mLCntrlIsDown { get; private set; }
-		public bool mRClickIsDown { get; private set; }
-		public bool mLClickIsDown { get; private set; }
-		public float mMouseHorizontal { get; private set; }
-		public float mMouseVertical { get; private set; }
+
+		/// used to determine whether we're trying to rotate the turret via mouse
+		public bool mMouseRotateModifier { get; private set; }
+
+		/// platform strings:
+		public enum ePlatform { winController, macController, linuxController, MouseAndKey };
+		public static GameInput mGameInput { get; private set; }
+		private ePlatform mPlatform = ePlatform.winController;
+		private string[] mFireKey = new string[] { "joystick button 0", "joystick button 0", "joystick button 0", "mouse 0" };
+
+		/// rotation
+		public float mHorizontalRotation { get; private set; }
+		public float mVerticalRotation { get; private set; }
+		private string[] mHorizontalRotateKey = new string[] { "Joystick_4_Axis", "Joystick_3_Axis", "Joystick_4_Axis", "Horizontal" };
+		private string[] mVerticalRotateKeyKey = new string[] { "Joystick_5_Axis", "Joystick_4_Axis", "Joystick_5_Axis", "Vertical" };
+
+		/// throttle
 		public float mLeftThrottle { get; private set; }
 		public float mRightThrottle { get; private set; }
+		private string[] mLeftThrottleForwardKey = new string[] { "Joystick_9_Axis", "Joystick_5_Axis", "Joystick_3_Axis", "LeftForward" };
+		private string[] mLeftThrottleReverseKey = new string[] { "joystick button 4", "joystick button 13", "joystick button 4", "LeftBackward" };
+		private string[] mRightThrottleForwardKey = new string[] { "Joystick_10_Axis", "Joystick_6_Axis", "Joystick_6_Axis", "RightForward" };
+		private string[] mRightThrottleReverseKey = new string[] { "joystick button 5", "joystick button 14", "joystick button 5", "RightBackward" };
 
 		/// for raycasting. Probably shouldn't be in this class, but it's easier.
 		public GameObject mSelectedObj { get; private set; }
-
-		public static GameInput mGameInput { get; private set; }
 
 		/// layer masks:
 		public LayerMask mDefaultMask { get; private set; }
@@ -34,6 +48,7 @@
 		[SerializeField]
 		private float mDeadZone = 0.1f;
 		public HackerGameManager mManager { get; private set; }
+
 		public override void Awake ()
 		{
 			base.Awake ();
@@ -44,36 +59,52 @@
 			mHitName = "n/a";
 			mHitObject = null;
 			mRayHitPos = new Vector3 (0, 0, 0);
-			mLShiftIsDown = false;
-			mLCntrlIsDown = false;
 			mDefaultMask = LayerMask.NameToLayer ("Default");
 			mPlayerMask = LayerMask.NameToLayer ("Player");
-			mMouseHorizontal = 0.0f;
-			mMouseVertical = 0.0f;
+			mHorizontalRotation = 0.0f;
+			mVerticalRotation = 0.0f;
 			mLeftThrottle = 0.0f;
 			mRightThrottle = 0.0f;
+		}
+
+		private ePlatform GetPlatform ()
+		{
+			if (!mManager.UseController)
+				mPlatform = ePlatform.MouseAndKey;
+			else
+			{
+				mPlatform = ePlatform.winController;
+				if (Application.platform == RuntimePlatform.LinuxPlayer || Application.platform == RuntimePlatform.LinuxEditor)
+					mPlatform = ePlatform.linuxController;
+				if (Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.OSXEditor)
+					mPlatform = ePlatform.macController;
+			}
+			return mPlatform;
 		}
 
 		void Start ()
 		{
 			mManager = HackerGameManager.mGame;
+			mPlatform = GetPlatform ();
 		}
 
 		/// processes our game input.
 		void Update ()
 		{
-			if (mManager.UseController)
-				CheckControllerInput ();
-			else
+			/// separated, as controller uses axes instead of buttons.
+			if (mPlatform == ePlatform.MouseAndKey)
 				CheckKeyboardInput ();
 
+			/// both controller and keyboard/mouse
+			CheckInput ();
 			CheckRaycast ();
 			CheckGeometryRaycast ();
 		}
 
 		void FixedUpdate ()
 		{
-			if (!mManager.UseController)
+			/// separated as keyboard will use buttons rather than axes.
+			if (mPlatform == ePlatform.MouseAndKey)
 				CheckKeyboardFixedInput ();
 			else
 				CheckControllerFixedInput ();
@@ -84,34 +115,28 @@
 		/// up/down events may not be detected due to the fixed time step.
 		private void CheckKeyboardFixedInput ()
 		{
-			if (Input.GetButton ("LeftForward"))
+			mLeftThrottle = 0;
+			mRightThrottle = 0;
+			if (Input.GetButton (mLeftThrottleForwardKey[(int) mPlatform]))
 			{
-				mLeftThrottle = 1;
-				OnLeftThrottleIsDown();
+				mLeftThrottle += 1;
+				OnLeftThrottleIsDown ();
 			}
-			if (Input.GetButton ("RightForward"))
+			if (Input.GetButton (mRightThrottleForwardKey[(int) mPlatform]))
 			{
-				mRightThrottle= 1;
-				OnRightThrottleIsDown();
+				mRightThrottle += 1;
+				OnRightThrottleIsDown ();
 			}
-			if (Input.GetButton ("LeftBackward"))
+			if (Input.GetButton (mLeftThrottleReverseKey[(int) mPlatform]))
 			{
-				mLeftThrottle = -1;
-				OnLeftThrottleIsDown();
+				mLeftThrottle -= 1;
+				OnLeftThrottleIsDown ();
 			}
-			if (Input.GetButton ("RightBackward"))
+			if (Input.GetButton (mRightThrottleReverseKey[(int) mPlatform]))
 			{
-				mRightThrottle = -1;
-				OnRightThrottleIsDown();
+				mRightThrottle -= 1;
+				OnRightThrottleIsDown ();
 			}
-			if (Input.GetAxis ("Mouse ScrollWheel") > 0.0f)
-				OnMouseWheelUp ();
-			if (Input.GetAxis ("Mouse ScrollWheel") < 0.0f)
-				OnMouseWheelDown ();
-			if (Input.GetAxis ("Mouse ScrollWheel") < 0.0f)
-				OnMouseWheelDown ();
-			if (Input.GetAxis ("Mouse ScrollWheel") < 0.0f)
-				OnMouseWheelDown ();
 		}
 
 		/// controller buttons that apply physics movement.
@@ -119,66 +144,49 @@
 		/// up/down events may not be detected due to the fixed time step.
 		private void CheckControllerFixedInput ()
 		{
-			if (Input.GetAxisRaw ("WC_YAxis") < -mDeadZone)
-				OnForwardIsDown ();
-			if (Input.GetAxisRaw ("WC_YAxis") > mDeadZone)
-				OnBackwardIsDown ();
-			if (Input.GetAxisRaw ("WC_XAxis") < -mDeadZone)
-				OnLeftIsDown ();
-			if (Input.GetAxisRaw ("WC_XAxis") > mDeadZone)
-				OnRightIsDown ();
-			if (Input.GetAxisRaw ("WC_RotateX") > mDeadZone)
-				OnRotateRightIsDown ();
-			if (Input.GetAxisRaw ("WC_RotateX") < -mDeadZone)
-				OnRotateLeftIsDown ();
-			if (Input.GetAxisRaw ("WC_RotateY") > mDeadZone)
-				OnRotateUpIsDown ();
-			if (Input.GetAxisRaw ("WC_RotateY") < -mDeadZone)
-				OnRotateDownIsDown ();
-			
-			mLeftThrottle = Input.GetAxisRaw ("WC_LeftThrottle");
-			if (mLeftThrottle > mDeadZone)
-				OnLeftThrottleIsDown ();
-			mRightThrottle = Input.GetAxisRaw ("WC_RightThrottle");
-			if (mRightThrottle> mDeadZone)
-				OnRightThrottleIsDown ();
+			// reverse are buttons rather than keys.
+			mLeftThrottle = 0;
+			mLeftThrottle += Input.GetAxisRaw (mLeftThrottleForwardKey[(int) mPlatform]);
+			if (Input.GetKey (mLeftThrottleReverseKey[(int) mPlatform]))
+				mLeftThrottle -= 1;
 
-			if(Input.GetButton("WC_ReverseLeftThrottle"))
-			{
-				mLeftThrottle =  -1;
+			mRightThrottle = 0;
+			mRightThrottle += Input.GetAxisRaw (mRightThrottleForwardKey[(int) mPlatform]);
+			if (Input.GetKey (mRightThrottleReverseKey[(int) mPlatform]))
+				mRightThrottle -= 1;
+
+			/// apply if necessary
+			if (mLeftThrottle > mDeadZone || mLeftThrottle < -mDeadZone)
 				OnLeftThrottleIsDown ();
-			}
-			if(Input.GetButton("WC_ReverseRightThrottle"))
-			{
-				mRightThrottle =  -1;
+			if (mRightThrottle > mDeadZone || mRightThrottle < -mDeadZone)
 				OnRightThrottleIsDown ();
-			}
 		}
 
-		private void CheckControllerInput ()
+		/// updated every frame. used for events. Same for both controllers and keyboard.
+		private void CheckInput ()
 		{
-			if(Input.GetButtonUp("WC_FirePrimary"))
-				OnFirePrimaryUp();
-			if(Input.GetButtonDown("WC_FirePrimary"))
+			mHorizontalRotation = Input.GetAxisRaw (mHorizontalRotateKey[(int) mPlatform]);
+			mVerticalRotation = Input.GetAxisRaw (mVerticalRotateKeyKey[(int) mPlatform]);
+			if (mHorizontalRotation > mDeadZone)
+				OnRotateRightIsDown ();
+			if (mHorizontalRotation < -mDeadZone)
+				OnRotateLeftIsDown ();
+			if (mVerticalRotation > mDeadZone)
+				OnRotateUpIsDown ();
+			if (mVerticalRotation < -mDeadZone)
+				OnRotateDownIsDown ();
+
+			if (Input.GetKeyDown (mFireKey[(int) mPlatform]))
+				OnFirePrimaryUp ();
+			if (Input.GetKeyDown (mFireKey[(int) mPlatform]))
 				OnFirePrimaryDown ();
+			if (Input.GetKey (mFireKey[(int) mPlatform]))
+				OnFirePrimaryIsDown ();
 		}
 
 		/// Checks for mouse click/drag events.
 		private void CheckKeyboardInput ()
 		{
-			/////////////////////////////////////////
-			/// left click/////////////////////////
-			/////////////////////////////////////////
-
-			if (Input.GetButtonUp ("LeftClick"))
-				OnFirePrimaryUp ();
-			else if (Input.GetButtonDown ("LeftClick"))
-				OnFirePrimaryDown ();
-
-			mLClickIsDown = Input.GetButton ("LeftClick");
-			if (mLClickIsDown)
-				OnLeftClickIsDown ();
-
 			/////////////////////////////////////////
 			/// right click/////////////////////////
 			/////////////////////////////////////////
@@ -190,37 +198,9 @@
 			else if (Input.GetButtonUp ("RightClick"))
 				OnRightClickUp ();
 
-			mRClickIsDown = Input.GetButton ("RightClick");
-			if (mRClickIsDown)
+			mMouseRotateModifier = Input.GetButton ("RightClick");
+			if (mMouseRotateModifier)
 				OnRightClickIsDown ();
-
-			/////////////////////////////////////////
-			/// middle click/////////////////////////
-			/////////////////////////////////////////
-
-			if (Input.GetButtonDown ("MiddleClick"))
-			{
-				CheckRaycast ();
-				OnMiddleClickDown ();
-			}
-			else if (Input.GetButtonUp ("MiddleClick"))
-				OnMiddleClickUp ();
-
-			if (Input.GetButton ("MiddleClick"))
-				OnMiddleClickIsDown ();
-
-			/////////////////////////////////////////
-			/// modifiers////////////////////////////
-			/////////////////////////////////////////
-
-			mLCntrlIsDown = Input.GetButton ("LCntrl");
-			mLShiftIsDown = Input.GetButton ("LShift");
-
-			/////////////////////////////////////////
-			/// axes ////////////////////////////
-			/////////////////////////////////////////
-			mMouseHorizontal = Input.GetAxisRaw ("Horizontal");
-			mMouseVertical = Input.GetAxisRaw ("Vertical");
 		}
 
 		/// Typical raycast. we store the hit object for use by other classes
@@ -253,44 +233,15 @@
 		/// Event Handlers////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		/// Event for box drag finished.
-		public delegate void LeftClickDownEventHandler (object source, EventArgs args);
-		public event LeftClickDownEventHandler LeftClickDown;
-		public void OnLeftClickDown ()
-		{
-			if (LeftClickDown != null)
-				LeftClickDown (this, EventArgs.Empty);
-		}
-
-		/// Event for box drag finished.
-		public delegate void LeftClickUpEventHandler (object source, EventArgs args);
-		public event LeftClickUpEventHandler LeftClickUp;
-		public void OnLeftClickUp ()
-		{
-			if (LeftClickUp != null)
-				LeftClickUp (this, EventArgs.Empty);
-		}
-
-		/// Event for left click being down.
-		public delegate void LeftClickIsDownEventHandler (object source, EventArgs args);
-		public event LeftClickIsDownEventHandler LeftClickIsDown;
-		public void OnLeftClickIsDown ()
-		{
-			if (LeftClickIsDown != null)
-				LeftClickIsDown (this, EventArgs.Empty);
-		}
-
 		///RightClick:
-		/// Event for box drag finished.
 		public delegate void RightClickDownEventHandler (object source, EventArgs args);
-		public event LeftClickDownEventHandler RightClickDown;
+		public event RightClickDownEventHandler RightClickDown;
 		public void OnRightClickDown ()
 		{
 			if (RightClickDown != null)
 				RightClickDown (this, EventArgs.Empty);
 		}
 
-		/// Event for box drag finished.
 		public delegate void RightClickUpEventHandler (object source, EventArgs args);
 		public event RightClickUpEventHandler RightClickUp;
 		public void OnRightClickUp ()
@@ -299,7 +250,6 @@
 				RightClickUp (this, EventArgs.Empty);
 		}
 
-		/// Event for left click being down.
 		public delegate void RightClickIsDownEventHandler (object source, EventArgs args);
 		public event RightClickIsDownEventHandler RightClickIsDown;
 		public void OnRightClickIsDown ()
@@ -308,71 +258,11 @@
 				RightClickIsDown (this, EventArgs.Empty);
 		}
 
-		/// Event for MiddleClickDown
-		public delegate void MiddleClickDownEventHandler (object source, EventArgs args);
-		public event MiddleClickDownEventHandler MiddleClickDown;
-		public void OnMiddleClickDown ()
-		{
-			if (MiddleClickDown != null)
-				MiddleClickDown (this, EventArgs.Empty);
-		}
-
-		/// Event for Middle click up
-		public delegate void MiddleClickUpEventHandler (object source, EventArgs args);
-		public event MiddleClickUpEventHandler MiddleClickUp;
-		public void OnMiddleClickUp ()
-		{
-			if (MiddleClickUp != null)
-				MiddleClickUp (this, EventArgs.Empty);
-		}
-
-		/// Event for Middle click being down.
-		public delegate void MiddleClickIsDownEventHandler (object source, EventArgs args);
-		public event MiddleClickIsDownEventHandler MiddleClickIsDown;
-		public void OnMiddleClickIsDown ()
-		{
-			if (MiddleClickIsDown != null)
-				MiddleClickIsDown (this, EventArgs.Empty);
-		}
-
 		///////////////////////////
 		//camera movements/////////
 		///////////////////////////
-		///RightClick:
-		public delegate void ForwardIsDownEventHandler (object source, EventArgs args);
-		public event ForwardIsDownEventHandler ForwardIsDown;
-		public void OnForwardIsDown ()
-		{
-			if (ForwardIsDown != null)
-				ForwardIsDown (this, EventArgs.Empty);
-		}
-
-		public delegate void BackwardIsDownEventHandler (object source, EventArgs args);
-		public event BackwardIsDownEventHandler BackwardIsDown;
-		public void OnBackwardIsDown ()
-		{
-			if (BackwardIsDown != null)
-				BackwardIsDown (this, EventArgs.Empty);
-		}
-
-		public delegate void LeftIsDownEventHandler (object source, EventArgs args);
-		public event LeftIsDownEventHandler LeftIsDown;
-		public void OnLeftIsDown ()
-		{
-			if (LeftIsDown != null)
-				LeftIsDown (this, EventArgs.Empty);
-		}
-
-		public delegate void RightIsDownEventHandler (object source, EventArgs args);
-		public event RightIsDownEventHandler RightIsDown;
-		public void OnRightIsDown ()
-		{
-			if (RightIsDown != null)
-				RightIsDown (this, EventArgs.Empty);
-		}
-
 		public delegate void RotateRightIsDownEventHandler (object source, EventArgs args);
-		public event RightIsDownEventHandler RotateRightIsDown;
+		public event RotateRightIsDownEventHandler RotateRightIsDown;
 		public void OnRotateRightIsDown ()
 		{
 			if (RotateRightIsDown != null)
@@ -401,22 +291,6 @@
 		{
 			if (RotateDownIsDown != null)
 				RotateDownIsDown (this, EventArgs.Empty);
-		}
-
-		//OnMouseWheel
-		public delegate void MouseWheelUpEventHandler (object source, EventArgs args);
-		public event MouseWheelUpEventHandler MouseWheelUp;
-		public void OnMouseWheelUp ()
-		{
-			if (MouseWheelUp != null)
-				MouseWheelUp (this, EventArgs.Empty);
-		}
-		public delegate void MouseWheelDownEventHandler (object source, EventArgs args);
-		public event MouseWheelDownEventHandler MouseWheelDown;
-		public void OnMouseWheelDown ()
-		{
-			if (MouseWheelDown != null)
-				MouseWheelDown (this, EventArgs.Empty);
 		}
 
 		/// throttle:

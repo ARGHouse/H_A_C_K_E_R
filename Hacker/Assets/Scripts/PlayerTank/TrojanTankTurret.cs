@@ -89,6 +89,7 @@
 			mReticule.SetActive(true);
 
 			mGameInput.FirePrimaryDown += FirePrimaryProjectile;
+			/// we don't want it grabbing every mouse movement, so rotate differently for kb+m.
 			if (mGame.UseController)
 			{
 				mGameInput.RotateRightIsDown += RotateRight;
@@ -102,8 +103,8 @@
 
 		private void MouseOrientTurret(object source, EventArgs args)
 		{
-			mTransform.RotateAround(mPivot.transform.position, mPivot.transform.up, mGameInput.mMouseHorizontal * Time.deltaTime * mMouseHorizontalTurretSpeed);
-			mRailgun.transform.RotateAround(mRailgunPivot.transform.position, -mTransform.right, mGameInput.mMouseVertical * Time.deltaTime * mMouseVerticalTurretSpeed);
+			mTransform.RotateAround(mPivot.transform.position, mPivot.transform.up, mGameInput.mHorizontalRotation * Time.deltaTime * mMouseHorizontalTurretSpeed);
+			mRailgun.transform.RotateAround(mRailgunPivot.transform.position, -mTransform.right, mGameInput.mVerticalRotation * Time.deltaTime * mMouseVerticalTurretSpeed);
 			mReticule.transform.position = mRailgunPivot.transform.position + (mRailgun.transform.forward * mReticuleDefaultDistance);
 		}
 
