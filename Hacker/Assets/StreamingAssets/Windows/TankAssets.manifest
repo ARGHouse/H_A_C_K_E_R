@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 437370953
+CRC: 1565120918
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a4ead059f1197d980fe5a874ab4f1dd2
+    Hash: 2bb8bc0c7c65571ed2e7d0bb43bf4485
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 23c3785327ab805cd34b448a907c2529
+    Hash: 499060f75aa3be6a3dac836adb03d823
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -70,6 +70,7 @@ ClassTypes:
 Assets:
 - Assets/Prefabs/Spark.prefab
 - Assets/Prefabs/LaserProjectile.prefab
+- Assets/Prefabs/MissileExplosion.prefab
 - Assets/Prefabs/TESTReticule.prefab
 - Assets/Prefabs/Player.prefab
 - Assets/Prefabs/Missile.prefab
