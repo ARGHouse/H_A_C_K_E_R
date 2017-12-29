@@ -60,6 +60,11 @@
      <Compile Include="Assets\3rdParty\AmplifyShaderEditor\Examples\Official\Smear\Smear.cs" />
      <Compile Include="Assets\3rdParty\AmplifyShaderEditor\Examples\Official\TemplateExamples\PostProcess\Sobel\PostProcessExample.cs" />
      <Compile Include="Assets\3rdParty\AmplifyShaderEditor\Examples\Official\TemplateExamples\Sprites\SpriteMask\SpriteMaskController.cs" />
+     <Compile Include="Assets\Scripts\EnemyBehavior\Brain.cs" />
+     <Compile Include="Assets\Scripts\EnemyBehavior\Chase.cs" />
+     <Compile Include="Assets\Scripts\EnemyBehavior\EnemyAlertIdle.cs" />
+     <Compile Include="Assets\Scripts\EnemyBehavior\EnemyIdle.cs" />
+     <Compile Include="Assets\Scripts\EnemyBehavior\Task.cs" />
      <Compile Include="Assets\Scripts\Misc\GameInput.cs" />
      <Compile Include="Assets\Scripts\Misc\HackerGameManager.cs" />
      <Compile Include="Assets\Scripts\Misc\Helpers.cs" />

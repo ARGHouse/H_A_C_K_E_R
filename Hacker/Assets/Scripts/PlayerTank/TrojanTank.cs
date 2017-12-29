@@ -28,13 +28,16 @@
 		/// reference to our turret
 		public TrojanTankTurret mTurret { get; private set; }
 
-		protected virtual void Awake()
+		public static TrojanTank mTank { get; private set; }
+
+		protected virtual void Awake ()
 		{
-			mTurret = GetComponentInChildren<TrojanTankTurret>();
-			mBody = GetComponent<Rigidbody>();
+			mTank = this;
+			mTurret = GetComponentInChildren<TrojanTankTurret> ();
+			mBody = GetComponent<Rigidbody> ();
 			mTransform = transform;
-			mHoverObjects = GetComponentsInChildren<HoverScript>();
-			foreach (Component cp in GetComponentsInChildren<Transform>())
+			mHoverObjects = GetComponentsInChildren<HoverScript> ();
+			foreach (Component cp in GetComponentsInChildren<Transform> ())
 			{
 				if (cp.name == "LeftThrottlePoint")
 					mLeftThrottlePoint = cp.transform;
@@ -43,28 +46,28 @@
 			}
 		}
 
-		protected virtual void Start()
+		protected virtual void Start ()
 		{
 			mGameInput = GameInput.mGameInput;
 			mGameInput.LeftThrottleIsDown += LeftThrottle;
 			mGameInput.RightThrottleIsDown += RightThrottle;
 		}
 
-		protected virtual void MoveTank(Vector3 dir)
+		protected virtual void MoveTank (Vector3 dir)
 		{
-			mBody.AddForce(dir * mAccelerationForce, ForceMode.Acceleration);
+			mBody.AddForce (dir * mAccelerationForce, ForceMode.Acceleration);
 		}
 
-		protected virtual void LeftThrottle(object source, EventArgs args)
+		protected virtual void LeftThrottle (object source, EventArgs args)
 		{
-			Vector3 dir = Helpers.FlattenDir(mBody.transform.forward);
-			mBody.AddForceAtPosition(dir * mGameInput.mLeftThrottle * mThrottleForce, mLeftThrottlePoint.position, ForceMode.Acceleration);
+			Vector3 dir = Helpers.FlattenDir (mBody.transform.forward);
+			mBody.AddForceAtPosition (dir * mGameInput.mLeftThrottle * mThrottleForce, mLeftThrottlePoint.position, ForceMode.Acceleration);
 		}
 
-		protected virtual void RightThrottle(object source, EventArgs args)
+		protected virtual void RightThrottle (object source, EventArgs args)
 		{
-			Vector3 dir = Helpers.FlattenDir(mBody.transform.forward);
-			mBody.AddForceAtPosition(dir * mGameInput.mRightThrottle * mThrottleForce, mRightThrottlePoint.position, ForceMode.Acceleration);
+			Vector3 dir = Helpers.FlattenDir (mBody.transform.forward);
+			mBody.AddForceAtPosition (dir * mGameInput.mRightThrottle * mThrottleForce, mRightThrottlePoint.position, ForceMode.Acceleration);
 		}
 	}
 }

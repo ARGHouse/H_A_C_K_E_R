@@ -24,7 +24,7 @@
 		private ePlatform mPlatform = ePlatform.winController;
 		private string[] mPrimaryFireKey = new string[] { "joystick button 0", "joystick button 16", "joystick button 0", "mouse 0" };
 		private string[] mSecondaryFireKey = new string[] { "joystick button 1", "joystick button 17", "joystick button 1", "mouse 2" };
-		
+
 		/// rotation
 		public float mHorizontalRotation { get; private set; }
 		public float mVerticalRotation { get; private set; }
@@ -68,6 +68,7 @@
 			mRightThrottle = 0.0f;
 		}
 
+		/// Gets our current game platform (currently just win/mac/linux)
 		private ePlatform GetPlatform ()
 		{
 			if (!mManager.UseController)
@@ -189,7 +190,7 @@
 			if (Input.GetKeyDown (mSecondaryFireKey[(int) mPlatform]))
 				OnFireSecondaryDown ();
 			if (Input.GetKey (mSecondaryFireKey[(int) mPlatform]))
-				OnFireSecondaryIsDown ();	
+				OnFireSecondaryIsDown ();
 		}
 
 		/// Checks for mouse click/drag events.
