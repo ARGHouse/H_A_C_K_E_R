@@ -39,6 +39,8 @@ GameObject:
   - component: {fileID: 114584295275634080}
   - component: {fileID: 54775859276598522}
   - component: {fileID: 136319164080674422}
+  - component: {fileID: 114129966439595554}
+  - component: {fileID: 114533289618360980}
   m_Layer: 8
   m_Name: Missile
   m_TagString: Untagged
@@ -232,6 +234,59 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &114129966439595554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1706098369684388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 8
+    i1: 25
+    i2: 120
+    i3: 249
+    i4: 191
+    i5: 62
+    i6: 116
+    i7: 96
+    i8: 88
+    i9: 227
+    i10: 208
+    i11: 102
+    i12: 61
+    i13: 54
+    i14: 85
+    i15: 95
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114533289618360980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1706098369684388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114584295275634080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -246,6 +301,7 @@ MonoBehaviour:
   mLifetime: 10
   mFireForce: 10
   mHitParticle: {fileID: 0}
+  mTrajectoryApexOffset: 10
 --- !u!136 &136319164080674422
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -271,7 +327,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1

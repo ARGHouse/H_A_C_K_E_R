@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4439021382219926}
   - component: {fileID: 54103693917210528}
   - component: {fileID: 114891174822019326}
+  - component: {fileID: 114227250577595008}
+  - component: {fileID: 114071637215352048}
   m_Layer: 8
   m_Name: LaserProjectile
   m_TagString: Untagged
@@ -160,6 +162,59 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &114071637215352048
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243966899382004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114227250577595008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243966899382004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 53
+    i1: 7
+    i2: 55
+    i3: 178
+    i4: 36
+    i5: 104
+    i6: 100
+    i7: 206
+    i8: 219
+    i9: 163
+    i10: 11
+    i11: 156
+    i12: 171
+    i13: 8
+    i14: 30
+    i15: 88
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114891174822019326
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -173,6 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mLifetime: 3
   mFireForce: 300
+  mHitParticle: {fileID: 0}
 --- !u!136 &136034687559113600
 CapsuleCollider:
   m_ObjectHideFlags: 1

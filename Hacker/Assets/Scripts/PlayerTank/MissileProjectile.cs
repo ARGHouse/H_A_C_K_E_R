@@ -2,8 +2,8 @@
 {
 	using System.Collections.Generic;
 	using System.Collections;
+	using UnityEngine.Networking;
 	using UnityEngine;
-
 	public class MissileProjectile : Projectile
 	{
 		/// amount above the target we'll max the arc at.
@@ -26,27 +26,24 @@
 					break;
 				case eProjectileState.fired:
 					{
-						mParticles.Play ();
-						/// we disable kinematic a tick before when fire() gets called.
-						/// applying force during the same tick goes badly.
-						Vector3 fwd = mTankParent.mTurret.mRailgun.transform.forward;
-						Vector3 pos = mTankParent.mTurret.mMuzzle.transform.position;
+						Vector3 fwd = mTankParent.mRailgun.transform.forward;
+						Vector3 pos = mTankParent.mMuzzle.transform.position;
 						int layerMask = 1 << LayerMask.NameToLayer ("Default");
 						RaycastHit hit;
 						if (Physics.Raycast (pos, fwd, out hit, 100000, layerMask))
 						{
-							float distanceToHit = Vector3.Distance (mTankParent.mTurret.mMuzzle.transform.position, hit.point);
-							print (hit.point.x + " " + hit.point.y + " " + hit.point.z + " " + distanceToHit);
-
 							Vector3 vel = Helpers.VelocityToHitPointWithSetApex ((hit.point.y + pos.y) + mTrajectoryApexOffset, pos, hit.point);
 							mMesh.enabled = true;
 							mCollider.isTrigger = false;
-							mBody.AddForce (vel, ForceMode.VelocityChange);
+							mBody.velocity = vel;
+							NetworkServer.Spawn (gameObject);
 						}
 						break;
 					}
 				case eProjectileState.hit:
-					Instantiate (mHitParticle, mBody.transform.position, Quaternion.identity).GetComponent<ParticleSystem> ().Play ();
+					GameObject go = Instantiate (mHitParticle, mBody.transform.position, Quaternion.identity);
+					go.GetComponent<ParticleSystem> ().Play ();
+					NetworkServer.Spawn(go);
 					SetState (eProjectileState.idle);
 					break;
 			}
@@ -61,6 +58,11 @@
 					mTransform.forward = mBody.velocity.normalized;
 					break;
 			}
+		}
+
+		protected override void OnCollisionEnter (Collision other)
+		{
+			base.OnCollisionEnter(other);
 		}
 	}
 }

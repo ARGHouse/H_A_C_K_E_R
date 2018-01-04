@@ -3,11 +3,14 @@
 	using System.Collections.Generic;
 	using System.Collections;
 	using System;
+	using UnityEngine.Networking;
 	using UnityEngine;
 
-	public class GameInput : Helpers.HelperSingleton<GameInput>
+	public class GameInput : NetworkBehaviour
 	{
 		public Camera mCamera { get; private set; }
+		public void SetCamera (Camera camera) { mCamera = camera; }
+
 		public Vector3 mMouseWorldPosition { get; private set; }
 
 		/// current raycast object selected by mouse.
@@ -50,12 +53,10 @@
 		private float mDeadZone = 0.1f;
 		public HackerGameManager mManager { get; private set; }
 
-		public override void Awake ()
+		void Awake ()
 		{
-			base.Awake ();
 			mGameInput = this;
 			mSelectedObj = null;
-			mCamera = Camera.main;
 			mMouseWorldPosition = new Vector3 (0, 0, 0);
 			mHitName = "n/a";
 			mHitObject = null;
@@ -99,8 +100,8 @@
 
 			/// both controller and keyboard/mouse
 			CheckInput ();
-			CheckRaycast ();
-			CheckGeometryRaycast ();
+			//CheckRaycast ();
+			//CheckGeometryRaycast ();
 		}
 
 		void FixedUpdate ()
@@ -215,6 +216,8 @@
 		/// Typical raycast. we store the hit object for use by other classes
 		public void CheckRaycast ()
 		{
+			if (!isLocalPlayer)
+				return;
 			Ray ray = mCamera.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 			bool raycast = Physics.Raycast (ray, out hit, 10000);
@@ -230,6 +233,8 @@
 
 		public void CheckGeometryRaycast ()
 		{
+			if (!isLocalPlayer)
+				return;
 			Ray ray = mCamera.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 			int layerMask = 1 << LayerMask.NameToLayer ("Default");

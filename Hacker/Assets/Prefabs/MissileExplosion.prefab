@@ -72,6 +72,7 @@ GameObject:
   - component: {fileID: 4392678179835476}
   - component: {fileID: 198516182154410046}
   - component: {fileID: 199325051402324772}
+  - component: {fileID: 114163724481945628}
   m_Layer: 0
   m_Name: MissileExplosion
   m_TagString: Untagged
@@ -268,6 +269,38 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114163724481945628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1838468379208310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 229
+    i1: 239
+    i2: 81
+    i3: 133
+    i4: 136
+    i5: 117
+    i6: 84
+    i7: 66
+    i8: 121
+    i9: 22
+    i10: 168
+    i11: 8
+    i12: 8
+    i13: 231
+    i14: 58
+    i15: 144
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114255885780558470
 MonoBehaviour:
   m_ObjectHideFlags: 1

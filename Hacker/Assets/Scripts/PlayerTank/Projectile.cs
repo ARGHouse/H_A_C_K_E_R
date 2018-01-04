@@ -2,7 +2,9 @@
 {
 	using System.Collections.Generic;
 	using System.Collections;
+	using UnityEngine.Networking;
 	using UnityEngine;
+
 	public class Projectile : MonoBehaviour
 	{
 		public enum eProjectileState { idle, fired, hit };
@@ -41,7 +43,7 @@
 			mTransform = transform;
 			mCollider = GetComponentInChildren<CapsuleCollider> ();
 			mBody = GetComponentInChildren<Rigidbody> ();
-			SetState (eProjectileState.idle);
+			mState = eProjectileState.fired;
 		}
 		public virtual void Init (TrojanTank tank, GameObject hitParticle)
 		{
@@ -81,16 +83,12 @@
 
 		/// fires the projectile. coroutine, as we need to wait a tick after repositioning the 
 		/// projectile and setting it active.
-		public virtual IEnumerator Fire (Transform projTransform, bool useParentVelocity = true)
+		public virtual void Fire (bool useParentVelocity)
 		{
-			mBody.position = projTransform.position;
-			mBody.rotation = projTransform.rotation;
-			mBody.isKinematic = false;
-			if(useParentVelocity)
+			if (useParentVelocity)
 				mBody.velocity = mTankParent.mBody.velocity;
-			else 
-				mBody.velocity = new Vector3(0,0,0);
-			yield return new WaitForFixedUpdate ();
+			else
+				mBody.velocity = new Vector3 (0, 0, 0);
 			SetState (eProjectileState.fired);
 		}
 
